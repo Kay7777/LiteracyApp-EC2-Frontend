@@ -25,7 +25,7 @@ class FluencyTutorTrainPage extends React.Component {
   }
 
   componentDidMount = async () => {
-    const doc = await axios.get("/api/fluency/data/table");
+    const doc = await axios.get("/api/fluency/testdata/table");
     console.log(doc.data);
     this.setState({ traindata: doc.data });
   };
@@ -51,7 +51,7 @@ class FluencyTutorTrainPage extends React.Component {
       ],
       answer: trainAddAnswer,
     };
-    await axios.post("/api/fluency/assign", { data });
+    await axios.post("/api/fluency/test", { data });
     await this.setState({
       alert: true,
       trainAddParagraph: "",
@@ -66,7 +66,7 @@ class FluencyTutorTrainPage extends React.Component {
   };
 
   deleteTrainData = async (id) => {
-    await axios.delete("/api/fluency/assign", { id });
+    await axios.delete("/api/fluency/test", { id });
     this.componentDidMount();
     this.setState({ alert: true });
   };

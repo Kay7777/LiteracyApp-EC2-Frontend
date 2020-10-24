@@ -38,8 +38,13 @@ class FluencyTutorMain extends React.Component {
               description="In this part, you can modify speed learning materials"
             />
             <TrainCard
-              title="Modify Fluency Data"
-              page="/tutor/fluency/data"
+              title="Modify Fluency Test Data"
+              page="/tutor/fluency/testdata"
+              description="In this part, you can modify speed training data"
+            />
+            <TrainCard
+              title="Modify Fluency Assignment Data"
+              page="/tutor/fluency/traindata"
               description="In this part, you can modify speed training data"
             />
           </div>

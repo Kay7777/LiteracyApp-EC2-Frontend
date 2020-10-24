@@ -46,7 +46,8 @@ const TutorSignIn = lazy(() => import("./pages/tutorpage/tutor-signin-page"));
 
 // Fluency pages
 const FluencyTutorMain = lazy(() => import("./pages/tutorpage/fluency/main"));
-const FluencyTutorData = lazy(() => import("./pages/tutorpage/fluency/data"));
+const FluencyTutorTestData = lazy(() => import("./pages/tutorpage/fluency/testdata"));
+const FluencyTutorTrainData = lazy(() => import("./pages/tutorpage/fluency/traindata"));
 const FluencyTutorTestAllAssign = lazy(() =>
   import("./pages/tutorpage/fluency/all-test")
 );
@@ -221,8 +222,13 @@ class App extends React.Component {
               <Route exact path="/tutor/fluency" component={FluencyTutorMain} />
               <Route
                 exact
-                path="/tutor/fluency/data"
-                component={FluencyTutorData}
+                path="/tutor/fluency/testdata"
+                component={FluencyTutorTestData}
+              />
+              <Route
+                exact
+                path="/tutor/fluency/traindata"
+                component={FluencyTutorTrainData}
               />
               <Route
                 exact
