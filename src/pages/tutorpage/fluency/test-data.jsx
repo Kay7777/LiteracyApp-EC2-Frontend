@@ -66,7 +66,7 @@ class FluencyTutorTrainPage extends React.Component {
   };
 
   deleteTrainData = async (id) => {
-    await axios.delete("/api/fluency/test", { id });
+    await axios.delete("/api/fluency/test/" + id);
     this.componentDidMount();
     this.setState({ alert: true });
   };
