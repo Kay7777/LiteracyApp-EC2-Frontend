@@ -46,8 +46,8 @@ const TutorSignIn = lazy(() => import("./pages/tutorpage/tutor-signin-page"));
 
 // Fluency pages
 const FluencyTutorMain = lazy(() => import("./pages/tutorpage/fluency/main"));
-const FluencyTutorTestData = lazy(() => import("./pages/tutorpage/fluency/testdata"));
-const FluencyTutorTrainData = lazy(() => import("./pages/tutorpage/fluency/traindata"));
+const FluencyTutorTestData = lazy(() => import("./pages/tutorpage/fluency/test-data"));
+const FluencyTutorTrainData = lazy(() => import("./pages/tutorpage/fluency/train-data"));
 const FluencyTutorTestAllAssign = lazy(() =>
   import("./pages/tutorpage/fluency/all-test")
 );
