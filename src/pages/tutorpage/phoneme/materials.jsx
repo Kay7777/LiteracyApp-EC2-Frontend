@@ -26,16 +26,36 @@ class phonemeTutorMaterials extends React.Component {
     const doc3 = await axios.get("/api/phoneme/materials/w2v1");
     const doc4 = await axios.get("/api/phoneme/materials/w2v2");
     if (doc1.data) {
-      this.setState({ w1v1: doc1.data.video });
+      this.setState({
+        w1v1: {
+          video: doc1.data.video,
+          desc: doc1.data.desc
+        }
+      });
     }
     if (doc2.data) {
-      this.setState({ w1v1: doc2.data.video });
+      this.setState({
+        w1v1: {
+          video: doc2.data.video,
+          desc: doc2.data.desc
+        }
+      });
     }
     if (doc3.data) {
-      this.setState({ w1v1: doc3.data.video });
+      this.setState({
+        w1v1: {
+          video: doc3.data.video,
+          desc: doc3.data.desc
+        }
+      });
     }
     if (doc4.data) {
-      this.setState({ w1v1: doc4.data.video });
+      this.setState({
+        w1v1: {
+          video: doc4.data.video,
+          desc: doc4.data.desc
+        }
+      });
     }
   };
 
