@@ -3,7 +3,7 @@ import axios from "axios";
 import keys from "../../../assets/keys";
 import { Button, Container, TextField, InputLabel, Select, MenuItem } from "@material-ui/core";
 
-class phonemeTutorMaterials extends React.Component {
+class PhonemeTutorMaterials extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -32,30 +32,38 @@ class phonemeTutorMaterials extends React.Component {
           desc: doc1.data.desc
         }
       });
+    } else {
+      this.setState({ w1v1: null })
     }
     if (doc2.data) {
       this.setState({
-        w1v1: {
+        w1v2: {
           video: doc2.data.video,
           desc: doc2.data.desc
         }
       });
+    } else {
+      this.setState({ w1v2: null })
     }
     if (doc3.data) {
       this.setState({
-        w1v1: {
+        w2v1: {
           video: doc3.data.video,
           desc: doc3.data.desc
         }
       });
+    } else {
+      this.setState({ w2v1: null })
     }
     if (doc4.data) {
       this.setState({
-        w1v1: {
+        w2v2: {
           video: doc4.data.video,
           desc: doc4.data.desc
         }
       });
+    } else {
+      this.setState({ w2v2: null })
     }
   };
 
@@ -270,4 +278,4 @@ class phonemeTutorMaterials extends React.Component {
   }
 }
 
-export default phonemeTutorMaterials;
+export default PhonemeTutorMaterials;

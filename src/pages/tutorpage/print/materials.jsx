@@ -1,51 +1,74 @@
 import React from "react";
 import axios from "axios";
-import { Button, Container, TextField } from "@material-ui/core";
 import keys from "../../../assets/keys";
+import { Button, Container, TextField, InputLabel, Select, MenuItem } from "@material-ui/core";
 
-class printTutorMaterials extends React.Component {
+class PrintTutorMaterials extends React.Component {
   constructor() {
     super();
     this.state = {
-      paragraphs: [],
-      videos: [],
-      currPara: "",
-      id: "",
-      url: "",
+      w1v1: null,
+      w1v2: null,
+      w2v1: null,
+      w2v2: null,
+      file: null,
+      w1v1Desc: null,
+      w1v2Desc: null,
+      w2v1Desc: null,
+      w2v2Desc: null,
+      section: "w1v1"
     };
   }
 
   componentDidMount = async () => {
-    const doc = await axios.get("/api/print/materials");
-    if (doc.data) {
+    const doc1 = await axios.get("/api/print/materials/w1v1");
+    const doc2 = await axios.get("/api/print/materials/w1v2");
+    const doc3 = await axios.get("/api/print/materials/w2v1");
+    const doc4 = await axios.get("/api/print/materials/w2v2");
+    if (doc1.data) {
       this.setState({
-        paragraphs: doc.data.paragraphs,
-        videos: doc.data.videos,
-        id: doc.data._id,
+        w1v1: {
+          video: doc1.data.video,
+          desc: doc1.data.desc
+        }
       });
+    } else {
+      this.setState({ w1v1: null })
+    }
+    if (doc2.data) {
+      this.setState({
+        w1v2: {
+          video: doc2.data.video,
+          desc: doc2.data.desc
+        }
+      });
+    } else {
+      this.setState({ w1v2: null })
+    }
+    if (doc3.data) {
+      this.setState({
+        w2v1: {
+          video: doc3.data.video,
+          desc: doc3.data.desc
+        }
+      });
+    } else {
+      this.setState({ w2v1: null })
+    }
+    if (doc4.data) {
+      this.setState({
+        w2v2: {
+          video: doc4.data.video,
+          desc: doc4.data.desc
+        }
+      });
+    } else {
+      this.setState({ w2v2: null })
     }
   };
 
-  handleParagraphAdd = async () => {
-    const { paragraphs, currPara } = this.state;
-    paragraphs.push(currPara);
-    await axios.put("/api/print/materials/" + this.state.id, { paragraphs });
-    this.setState({ currPara: "" });
-    this.componentDidMount();
-  };
-
-  handleParagraphDelete = async (index) => {
-    const { paragraphs } = this.state;
-    const newParagraphs = paragraphs
-      .slice(0, index)
-      .concat(paragraphs.slice(index + 1, paragraphs.length));
-    await axios.put("/api/print/materials/" + this.state.id, {
-      paragraphs: newParagraphs,
-    });
-    this.componentDidMount();
-  };
-
-  handleVideoAdd = async (file) => {
+  handleMaterialsAdd = async () => {
+    const { file, section, w1v1Desc, w1v2Desc, w2v1Desc, w2v2Desc } = this.state;
     if (!!file) {
       const doc = await axios.get("/api/print/video");
       const uploadConfigs = doc.data;
@@ -56,34 +79,171 @@ class printTutorMaterials extends React.Component {
           },
         })
         .catch((err) => console.log(err));
-      const { videos, id } = this.state;
-      videos.push(uploadConfigs.key);
-      await axios.put("/api/print/materials/" + id, { videos });
+      if (section === "w1v1") {
+        await axios.post("/api/print/materials/w1v1",
+          { desc: w1v1Desc, video: uploadConfigs.key });
+      } else if (section === "w1v2") {
+        await axios.post("/api/print/materials/w1v2",
+          { desc: w1v2Desc, video: uploadConfigs.key });
+      } else if (section === "w2v1") {
+        await axios.post("/api/print/materials/w2v1",
+          { desc: w2v1Desc, video: uploadConfigs.key });
+      } else if (section === "w2v2") {
+        await axios.post("/api/print/materials/w2v2",
+          { desc: w2v2Desc, video: uploadConfigs.key });
+      }
       this.componentDidMount();
     }
   };
 
-  handleVideoAddByUrl = async () => {
-    const { url, id, videos } = this.state;
-    videos.push(url);
-    await axios.put("/api/print/materials/" + id, { videos });
-    this.setState({ url: "" });
+  handleMaterialsDelete = async () => {
+    const { section } = this.state;
+    if (section === "w1v1") {
+      await axios.delete("/api/print/materials/w1v1");
+    } else if (section === "w1v2") {
+      await axios.delete("/api/print/materials/w1v2");
+    } else if (section === "w2v1") {
+      await axios.delete("/api/print/materials/w2v1");
+    } else if (section === "w2v2") {
+      await axios.delete("/api/print/materials/w2v2");
+    }
     this.componentDidMount();
   };
 
-  handleVideoDelete = async (index) => {
-    const { videos } = this.state;
-    const newVideos = videos
-      .slice(0, index)
-      .concat(videos.slice(index + 1, videos.length));
-    await axios.put("/api/print/materials/" + this.state.id, {
-      videos: newVideos,
-    });
-    this.componentDidMount();
-  };
+  handleSectionChange = (e) => {
+    this.setState({ section: e.target.value });
+  }
+
+  renderContent = () => {
+    const { section, w1v1, w1v2, w2v1, w2v2 } = this.state;
+    switch (section) {
+      case "w1v1":
+        if (w1v1) {
+          return <div>
+            <h5>{w1v1.desc}</h5>
+            <iframe width="40%" src={keys.AWS + w1v1.video}></iframe>
+            <Button variant="outlined" color="danger" onClick={this.handleMaterialsDelete}>Delete</Button>
+          </div>;
+        } else {
+          return <div>
+            <TextField
+              style={{ width: "50%", marginRight: 10 }}
+              multiline={true}
+              placeholder="description"
+              onChange={(e) => this.setState({ w1v1Desc: e.target.value })}
+            />
+            <br /><br />
+            <input
+              type="file"
+              accept="video/*"
+              onChange={(e) => this.setState({ file: e.target.files[0] })}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={this.handleMaterialsAdd}
+            >
+              Add
+          </Button>
+          </div>
+        }
+
+      case "w1v2":
+        if (w1v2) {
+          return <div>
+            <h5>{w1v2.desc}</h5>
+            <iframe width="40%" src={keys.AWS + w1v2.video}></iframe>
+            <Button variant="outlined" color="danger" onClick={this.handleMaterialsDelete}>Delete</Button>
+          </div>;
+        } else {
+          return <div>
+            <TextField
+              style={{ width: "50%", marginRight: 10 }}
+              multiline={true}
+              placeholder="description"
+              onChange={(e) => this.setState({ w1v2Desc: e.target.value })}
+            />
+            <br /><br />
+            <input
+              type="file"
+              accept="video/*"
+              onChange={(e) => this.setState({ file: e.target.files[0] })}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={this.handleMaterialsAdd}
+            >
+              Add
+          </Button>
+          </div>
+        }
+
+      case "w2v1":
+        if (w2v1) {
+          return <div>
+            <h5>{w2v1.desc}</h5>
+            <iframe width="40%" src={keys.AWS + w2v1.video}></iframe>
+            <Button variant="outlined" color="danger" onClick={this.handleMaterialsDelete}>Delete</Button>
+          </div>;
+        } else {
+          return <div>
+            <TextField
+              style={{ width: "50%", marginRight: 10 }}
+              multiline={true}
+              placeholder="description"
+              onChange={(e) => this.setState({ w2v1Desc: e.target.value })}
+            />
+            <br /><br />
+            <input
+              type="file"
+              accept="video/*"
+              onChange={(e) => this.setState({ file: e.target.files[0] })}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={this.handleMaterialsAdd}
+            >
+              Add
+          </Button>
+          </div>
+        }
+      case "w2v2":
+        if (w2v2) {
+          return <div>
+            <h5>{w2v2.desc}</h5>
+            <iframe width="40%" src={keys.AWS + w2v2.video}></iframe>
+            <Button variant="outlined" color="danger" onClick={this.handleMaterialsDelete}>Delete</Button>
+          </div>;
+        } else {
+          return <div>
+            <TextField
+              style={{ width: "50%", marginRight: 10 }}
+              multiline={true}
+              placeholder="description"
+              onChange={(e) => this.setState({ w2v2Desc: e.target.value })}
+            />
+            <br /><br />
+            <input
+              type="file"
+              accept="video/*"
+              onChange={(e) => this.setState({ file: e.target.files[0] })}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={this.handleMaterialsAdd}
+            >
+              Add
+          </Button>
+          </div>
+        }
+    }
+  }
 
   render() {
-    const { paragraphs, videos } = this.state;
+    const { section } = this.state;
     return (
       <div>
         <div className="jumbotron">
@@ -93,94 +253,29 @@ class printTutorMaterials extends React.Component {
             Go back
           </Button>
         </div>
-        <Container>
-          <TextField
-            style={{ width: "50%", marginRight: 10 }}
-            multiline={true}
-            onChange={(e) => this.setState({ currPara: e.target.value })}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={this.handleParagraphAdd}
-          >
-            Add
-          </Button>
-          <br />
-          <br />
-          {paragraphs.map((paragraph, index) => {
-            return (
-              <div className="row">
-                <h5>{paragraph}</h5>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  style={{ marginRight: 10 }}
-                  onClick={() => this.handleParagraphDelete(index)}
-                >
-                  Delete
-                </Button>
-              </div>
-            );
-          })}
+        <div>
+          <Container>
+            <InputLabel id="label">Learning Section</InputLabel>
+            <Select
+              labelId="demo-controlled-open-select-label"
+              id="demo-controlled-open-select"
+              value={section}
+              onChange={this.handleSectionChange}
+            >
+              <MenuItem value="w1v1">Week1 Video1</MenuItem>
+              <MenuItem value="w1v2">Week1 Video2</MenuItem>
+              <MenuItem value="w2v1">Week2 Video1</MenuItem>
+              <MenuItem value="w2v2">Week2 Video2</MenuItem>
+            </Select>
+          </Container>
           <hr />
-
-          <div>
-            <h4>You can either upload a video or input video URL:</h4>
-            <input
-              type="file"
-              accept="video/*"
-              onChange={(e) => this.handleVideoAdd(e.target.files[0])}
-            />
-            <h6>
-              (If you use the locally upload, the video will automatically
-              upload when you choose the file, you do not need to click "upload"
-              button again)
-            </h6>
-            <div className="row">
-              <TextField
-                value={this.state.url}
-                onChange={(e) => this.setState({ url: e.target.value })}
-                style={{ width: "50%", marginLeft: 10 }}
-                multiline={true}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                style={{ marginLeft: 10 }}
-                onClick={this.handleVideoAddByUrl}
-              >
-                Upload
-              </Button>
-            </div>
-          </div>
-
-          <br />
-          <br />
-          {videos.map((video, index) => {
-            return (
-              <div className="row">
-                {video.includes("http") ? (
-                  <h5>{video}</h5>
-                ) : (
-                  <h5>{keys.AWS + video}</h5>
-                )}
-
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  style={{ marginLeft: 10 }}
-                  onClick={() => this.handleVideoDelete(index)}
-                >
-                  Delete
-                </Button>
-              </div>
-            );
-          })}
-        </Container>
+          <Container>
+            {this.renderContent()}
+          </Container>
+        </div>
       </div>
     );
   }
 }
 
-export default printTutorMaterials;
+export default PrintTutorMaterials;
