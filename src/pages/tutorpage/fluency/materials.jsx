@@ -163,8 +163,8 @@ class FluencyTutorMaterials extends React.Component {
                 {video.includes("http") ? (
                   <h5>{video}</h5>
                 ) : (
-                  <h5>{keys.AWS + video}</h5>
-                )}
+                    <h5>{keys.AWS + video}</h5>
+                  )}
 
                 <Button
                   variant="outlined"
