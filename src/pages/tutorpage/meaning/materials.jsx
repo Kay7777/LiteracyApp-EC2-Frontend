@@ -70,7 +70,7 @@ class MeaningTutorMaterials extends React.Component {
   handleMaterialsAdd = async () => {
     const { file, section, w1v1Desc, w1v2Desc, w2v1Desc, w2v2Desc } = this.state;
     if (!!file) {
-      const doc = await axios.get("/api/meaning/video");
+      const doc = await axios.get("/api/meaning/video", { type: file.type });
       const uploadConfigs = doc.data;
       await axios
         .put(uploadConfigs.url, file, {
