@@ -9,26 +9,27 @@ class FluencyAssignment extends React.Component {
   state = {
     understand: false,
     id: "",
+    version: "w1"
   };
 
   render() {
-    const { understand, id } = this.state;
+    const { understand, id, version } = this.state;
     return (
       <div>
         {understand ? (
           <Container>
-            {id === "" ? <FluencyMain /> : <FluencyProgress progress_id={id} />}
+            {id === "" ? <FluencyMain version={version} /> : <FluencyProgress progress_id={id} />}
           </Container>
         ) : (
-          <div>
-            <FluencyHeader part="Training Assignment" />
-            <FluencyIntro
-              handleClick={(id) =>
-                this.setState({ understand: !understand, id })
-              }
-            />
-          </div>
-        )}
+            <div>
+              <FluencyHeader part="Training Assignment" />
+              <FluencyIntro
+                handleClick={(id, version) =>
+                  this.setState({ understand: !understand, id, version })
+                }
+              />
+            </div>
+          )}
       </div>
     );
   }

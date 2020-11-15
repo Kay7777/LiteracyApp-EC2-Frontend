@@ -140,7 +140,10 @@ class FluencyMaterials extends React.Component {
         </Container><br />
         <Container>
           {this.renderContent()}
+          <br />
+          <Button variant="contained" color="primary" onClick={() => window.location = "/student/fluency"}>Back</Button>
         </Container>
+
       </div>
     );
   }

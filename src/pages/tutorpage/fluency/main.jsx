@@ -16,6 +16,7 @@ class FluencyTutorMain extends React.Component {
           <hr />
         </div>
         <Container>
+          <h3>Review Students' Assignments and Performance</h3>
           <div className="row">
             <TrainCard
               title="Students' Access"
@@ -32,6 +33,12 @@ class FluencyTutorMain extends React.Component {
               page="/tutor/fluency/performance"
               description="In this part, you can check students' performance"
             />
+
+          </div>
+        </Container>
+        <Container>
+          <h3>Review Students' Assignments and Performance</h3>
+          <div className="row">
             <TrainCard
               title="Modify Learning Materials"
               page="/tutor/fluency/materials"

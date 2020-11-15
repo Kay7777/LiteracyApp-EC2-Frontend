@@ -40,6 +40,7 @@ class FluencyAssignPart extends Component {
       readDone: false,
       answerred: false,
       alert: false,
+      version: ""
     };
   }
 
@@ -58,6 +59,7 @@ class FluencyAssignPart extends Component {
       choices,
       answers,
       studentAnswers,
+      version
     } = doc.data;
     this.setState({
       speed,
@@ -71,6 +73,7 @@ class FluencyAssignPart extends Component {
       choices,
       answers,
       studentAnswers,
+      version
     });
     this.startReading();
   };
@@ -155,6 +158,7 @@ class FluencyAssignPart extends Component {
     // 1. Clean the student last progress and delete the old progress
     const doc1 = await axios.put("/api/fluency/student/progress", {
       newProgress: "",
+      version: this.state.version
     });
     if (doc1.data !== "") {
       await axios.delete("/api/fluency/student/progress/" + doc1.data);
@@ -164,6 +168,7 @@ class FluencyAssignPart extends Component {
     const doc2 = await axios.post("/api/fluency/student/progress", this.state);
     await axios.put("/api/fluency/student/progress", {
       newProgress: doc2.data._id,
+      version: this.state.version
     });
 
     // show alert bar
@@ -178,6 +183,7 @@ class FluencyAssignPart extends Component {
       answers,
       choices,
       studentAnswers,
+      version
     } = this.state;
     const newSpeed = speed.pop();
     let assignment = [];
@@ -194,6 +200,7 @@ class FluencyAssignPart extends Component {
     // create the practice assignment
     await axios.post("/api/fluency/student/assign", {
       assignment,
+      version,
       newSpeed,
     });
     // update fluency practice history score
@@ -253,75 +260,75 @@ class FluencyAssignPart extends Component {
                   <br />
                 </div>
               ) : (
-                <div>
-                  <P1>You have finish all the training questions!</P1>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={this.finishTrain}
-                    size="large"
-                  >
-                    Good Job!
+                  <div>
+                    <P1>You have finish all the training questions!</P1>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={this.finishTrain}
+                      size="large"
+                    >
+                      Good Job!
                   </Button>
+                  </div>
+                )
+            ) : (
+                <div>
+                  <P1>{questions[index]}</P1>
+                  <FormControlLabel
+                    value={choices[index][0]}
+                    label={choices[index][0]}
+                    control={<Radio />}
+                    onChange={this.checkAnswer}
+                  />
+                  <br />
+                  <FormControlLabel
+                    value={choices[index][1]}
+                    label={choices[index][1]}
+                    control={<Radio />}
+                    onChange={this.checkAnswer}
+                  />
+                  <br />
+                  <FormControlLabel
+                    value={choices[index][2]}
+                    label={choices[index][2]}
+                    control={<Radio />}
+                    onChange={this.checkAnswer}
+                  />
+                  <br />
+                  <FormControlLabel
+                    value={choices[index][3]}
+                    label={choices[index][3]}
+                    control={<Radio />}
+                    onChange={this.checkAnswer}
+                  />
                 </div>
               )
-            ) : (
-              <div>
-                <P1>{questions[index]}</P1>
-                <FormControlLabel
-                  value={choices[index][0]}
-                  label={choices[index][0]}
-                  control={<Radio />}
-                  onChange={this.checkAnswer}
-                />
-                <br />
-                <FormControlLabel
-                  value={choices[index][1]}
-                  label={choices[index][1]}
-                  control={<Radio />}
-                  onChange={this.checkAnswer}
-                />
-                <br />
-                <FormControlLabel
-                  value={choices[index][2]}
-                  label={choices[index][2]}
-                  control={<Radio />}
-                  onChange={this.checkAnswer}
-                />
-                <br />
-                <FormControlLabel
-                  value={choices[index][3]}
-                  label={choices[index][3]}
-                  control={<Radio />}
-                  onChange={this.checkAnswer}
-                />
-              </div>
-            )
           ) : (
-            <div>
-              {currParaArray.length !== 0 ? (
-                <div className="row" style={{ paddingLeft: 30, fontSize: 20 }}>
-                  {currParaArray.map((letter, index) => {
-                    if (letter === " ") {
-                      return (
-                        <div className={index} key={index}>
-                          &nbsp;
-                        </div>
-                      );
-                    } else {
-                      return (
-                        <div className={index} key={index}>
-                          <P2>{letter}</P2>
-                        </div>
-                      );
-                    }
-                  })}
-                </div>
-              ) : (
-                <Process />
-              )}
-            </div>
-          )}
+              <div>
+                {currParaArray.length !== 0 ? (
+                  <div className="row" style={{ paddingLeft: 30, fontSize: 20 }}>
+                    {currParaArray.map((letter, index) => {
+                      if (letter === " ") {
+                        return (
+                          <div className={index} key={index}>
+                            &nbsp;
+                          </div>
+                        );
+                      } else {
+                        return (
+                          <div className={index} key={index}>
+                            <P2>{letter}</P2>
+                          </div>
+                        );
+                      }
+                    })}
+                  </div>
+                ) : (
+                    <Process />
+                  )}
+              </div>
+            )}
           <br />
           <LinearProgress variant="determinate" value={progress} />
         </Container>
