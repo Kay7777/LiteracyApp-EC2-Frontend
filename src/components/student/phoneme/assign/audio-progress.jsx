@@ -17,8 +17,8 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 class PhonemeAudioAssign extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       levels: [],
       originalAudios: [],
@@ -27,6 +27,7 @@ class PhonemeAudioAssign extends React.Component {
       index: 0,
       audioDone: false,
       alert: false,
+      version: null
     };
   }
 
@@ -37,6 +38,7 @@ class PhonemeAudioAssign extends React.Component {
       originalAudios,
       questions,
       answerAudios,
+      version
     } = this.props.progress;
     this.setState({
       originalAudios,
@@ -44,16 +46,8 @@ class PhonemeAudioAssign extends React.Component {
       answerAudios,
       levels: audioLevels,
       index: audioIndex,
+      version
     });
-  };
-
-  generateAssign = (data) => {
-    let { questions, audios } = data;
-    while (questions.length < 50) {
-      questions = questions.concat(questions);
-      audios = audios.concat(audios);
-    }
-    return { questions, audios };
   };
 
   handleUpload = async (file) => {
@@ -98,6 +92,7 @@ class PhonemeAudioAssign extends React.Component {
     // 1. Clean the student last progress and delete the old progress
     const doc1 = await axios.put("/api/phoneme/student/progress", {
       newProgress: "",
+      version: this.state.version
     });
     if (doc1.data !== "") {
       await axios.delete("/api/phoneme/student/progress/" + doc1.data);
@@ -112,10 +107,12 @@ class PhonemeAudioAssign extends React.Component {
     });
     await axios.put("/api/phoneme/student/progress", {
       newProgress: doc2.data._id,
+      version: this.state.version
     });
     // show alert bar
     this.setState({ alert: true });
   };
+
   handleCloseAlert = (event, reason) => {
     if (reason === "clickaway") return;
     this.setState({ alert: false });
@@ -147,42 +144,42 @@ class PhonemeAudioAssign extends React.Component {
           <Paper>
             {originalAudios.length === 0 ? null : originalAudios.length !==
               index ? (
-              audioDone ? (
+                audioDone ? (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    onClick={this.handleChangeQuestion}
+                  >
+                    Next Question
+                  </Button>
+                ) : (
+                    <Container>
+                      <P2>{questions[index]}</P2>
+                      <br />
+                      {originalAudios[index].map((audio) => {
+                        return <audio src={keys.AWS + audio} controls="controls" />;
+                      })}
+
+                      <hr />
+                      <AudioRecord
+                        handleUpload={(file) => this.handleUpload(file)}
+                      />
+                      <br />
+                      <LinearProgress variant="determinate" value={progress} />
+                    </Container>
+                  )
+              ) : (
                 <Button
                   variant="contained"
                   color="primary"
                   size="large"
                   onClick={this.handleChangeQuestion}
+                  style={{ width: "90%", margin: 20 }}
                 >
-                  Next Question
+                  Submit
                 </Button>
-              ) : (
-                <Container>
-                  <P2>{questions[index]}</P2>
-                  <br />
-                  {originalAudios[index].map((audio) => {
-                    return <audio src={keys.AWS + audio} controls="controls" />;
-                  })}
-
-                  <hr />
-                  <AudioRecord
-                    handleUpload={(file) => this.handleUpload(file)}
-                  />
-                  <br />
-                  <LinearProgress variant="determinate" value={progress} />
-                </Container>
-              )
-            ) : (
-              <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                onClick={this.handleChangeQuestion}
-                style={{ width: "90%", margin: 20 }}
-              >
-                Submit
-              </Button>
-            )}
+              )}
           </Paper>
         </Container>
         <Snackbar

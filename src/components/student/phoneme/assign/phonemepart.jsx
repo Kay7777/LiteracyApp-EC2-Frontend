@@ -14,8 +14,8 @@ function Alert(props) {
 }
 
 class PhonemeTrainPart extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       ids: [],
       wrongIds: [],
@@ -30,30 +30,20 @@ class PhonemeTrainPart extends React.Component {
       phonemeAssign: [],
       alert: false,
       appearTimes: {},
+      version: this.props.version
     };
   }
 
   componentDidMount = async () => {
-    const doc = await axios("/api/phoneme/phonemes");
-    const { words, phonemes, levels, ids } = this.generateAssign(doc.data);
-    const number = 2;
-    await this.setState({
-      words: words.slice(0, number),
-      phonemes: phonemes.slice(0, number),
-      levels: levels.slice(0, number),
-      ids: ids.slice(0, number),
-    });
-  };
-
-  generateAssign = (data) => {
-    let { words, phonemes, levels, ids } = data;
-    while (words.length < 50) {
-      words = words.concat(words);
-      phonemes = phonemes.concat(phonemes);
-      levels = levels.concat(levels);
-      ids = ids.concat(ids);
+    const { version } = this.state;
+    let doc;
+    if (version === "w1") {
+      doc = await axios("/api/phoneme/phonemes/w1");
+    } else if (version === "w2") {
+      doc = await axios("/api/phoneme/phonemes/w2");
     }
-    return { words, phonemes, levels, ids };
+    const { words, phonemes, levels, ids } = doc.data;
+    await this.setState({ words, phonemes, levels, ids });
   };
 
   handleFlip = async () => {
@@ -122,6 +112,7 @@ class PhonemeTrainPart extends React.Component {
     // 1. Clean the student last progress and delete the old progress
     const doc1 = await axios.put("/api/phoneme/student/progress", {
       newProgress: "",
+      version: this.state.version
     });
     if (doc1.data !== "") {
       await axios.delete("/api/phoneme/student/progress/" + doc1.data);
@@ -134,10 +125,12 @@ class PhonemeTrainPart extends React.Component {
     });
     await axios.put("/api/phoneme/student/progress", {
       newProgress: doc2.data._id,
+      version: this.state.version
     });
     // show alert bar
     this.setState({ alert: true });
   };
+
   handleCloseAlert = (event, reason) => {
     if (reason === "clickaway") return;
     this.setState({ alert: false });
@@ -199,24 +192,24 @@ class PhonemeTrainPart extends React.Component {
                   ) : null}
                 </div>
               ) : (
-                <div>
-                  <P1>Congratulations, you have finished the first part</P1>
-                  <Button
-                    color="primary"
-                    size="large"
-                    variant="contained"
-                    onClick={() =>
-                      this.props.handlePhonemeAssign(phonemeAssign)
-                    }
-                  >
-                    Continue
+                  <div>
+                    <P1>Congratulations, you have finished the first part</P1>
+                    <Button
+                      color="primary"
+                      size="large"
+                      variant="contained"
+                      onClick={() =>
+                        this.props.handlePhonemeAssign(phonemeAssign)
+                      }
+                    >
+                      Continue
                   </Button>
-                </div>
-              )}
+                  </div>
+                )}
             </div>
           ) : (
-            <Process />
-          )}
+              <Process />
+            )}
         </Container>
         <Snackbar
           open={this.state.alert}

@@ -11,8 +11,8 @@ function Alert(props) {
 }
 
 class MeaningTrainPart extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       q1: [],
       q2: [],
@@ -28,6 +28,7 @@ class MeaningTrainPart extends React.Component {
       q3Assign: [],
       q_show: 0,
       alert: false,
+      version: null
     };
   }
 
@@ -50,6 +51,7 @@ class MeaningTrainPart extends React.Component {
       q3Questions,
       q3Score,
       q3Index,
+      version
     } = doc.data;
     if (q3Assign.length !== 0) {
       this.setState({
@@ -63,6 +65,7 @@ class MeaningTrainPart extends React.Component {
         q1Index,
         q2Index,
         q3Index,
+        version
       });
     } else if (q2Assign.length !== 0) {
       this.setState({
@@ -105,6 +108,7 @@ class MeaningTrainPart extends React.Component {
     // 1. Clean the student last progress and delete the old progress
     const doc1 = await axios.put("/api/meaning/student/progress", {
       newProgress: "",
+      version: this.state.version
     });
     if (doc1.data !== "") {
       await axios.delete("/api/meaning/student/progress/" + doc1.data);
@@ -127,6 +131,7 @@ class MeaningTrainPart extends React.Component {
     });
     await axios.put("/api/meaning/student/progress", {
       newProgress: doc2.data._id,
+      version: this.state.version
     });
     // show alert bar
     this.setState({ alert: true });
@@ -138,7 +143,7 @@ class MeaningTrainPart extends React.Component {
   };
 
   handleSubmit = async (q3_score, q3Assign) => {
-    const { q1_score, q2_score, q1Assign, q2Assign } = this.state;
+    const { q1_score, q2_score, q1Assign, q2Assign, version } = this.state;
     const newScore = q1_score + q2_score + q3_score;
     console.log(q1_score, q2_score, q3_score, q1Assign, q2Assign, q3Assign);
     await axios.post("/api/meaning/assign", {
@@ -146,6 +151,7 @@ class MeaningTrainPart extends React.Component {
       q1Assign,
       q2Assign,
       q3Assign,
+      version
     });
     await axios.put("/api/meaning/score", { newScore });
     window.location = "/student/meaning";

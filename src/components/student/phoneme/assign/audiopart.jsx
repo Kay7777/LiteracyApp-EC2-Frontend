@@ -19,8 +19,8 @@ function Alert(props) {
 }
 
 class PhonemeAudioAssign extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       levels: [],
       originalAudios: [],
@@ -29,11 +29,13 @@ class PhonemeAudioAssign extends React.Component {
       index: 0,
       audioDone: false,
       alert: false,
+      version: this.props.version
     };
   }
 
   componentDidMount = async () => {
-    const doc = await axios.get("/api/phoneme/audios");
+    const { version } = this.state;
+    const doc = await axios.get("/api/phoneme/audios", { version });
     const { questions, audios } = this.generateAssign(doc.data);
     const number = 20;
     this.setState({
@@ -93,6 +95,7 @@ class PhonemeAudioAssign extends React.Component {
     // 1. Clean the student last progress and delete the old progress
     const doc1 = await axios.put("/api/phoneme/student/progress", {
       newProgress: "",
+      version: this.state.version
     });
     if (doc1.data !== "") {
       await axios.delete("/api/phoneme/student/progress/" + doc1.data);
@@ -107,6 +110,7 @@ class PhonemeAudioAssign extends React.Component {
     });
     await axios.put("/api/phoneme/student/progress", {
       newProgress: doc2.data._id,
+      version: this.state.version
     });
     // show alert bar
     this.setState({ alert: true });
@@ -116,6 +120,7 @@ class PhonemeAudioAssign extends React.Component {
     if (reason === "clickaway") return;
     this.setState({ alert: false });
   };
+
   render() {
     const { audioDone, originalAudios, index, questions } = this.state;
     const progress = Math.floor(((index + 1) / questions.length) * 100);
@@ -142,41 +147,41 @@ class PhonemeAudioAssign extends React.Component {
           <Paper>
             {originalAudios.length === 0 ? null : originalAudios.length !==
               index ? (
-              audioDone ? (
+                audioDone ? (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    onClick={this.handleChangeQuestion}
+                  >
+                    Next Question
+                  </Button>
+                ) : (
+                    <Container>
+                      <P2>{questions[index]}</P2>
+                      <br />
+                      {originalAudios[index].map((audio) => {
+                        return <audio src={keys.AWS + audio} controls="controls" />;
+                      })}
+                      <hr />
+                      <AudioRecord
+                        handleUpload={(file) => this.handleUpload(file)}
+                      />
+                      <br />
+                      <LinearProgress variant="determinate" value={progress} />
+                    </Container>
+                  )
+              ) : (
                 <Button
                   variant="contained"
                   color="primary"
                   size="large"
                   onClick={this.handleChangeQuestion}
+                  style={{ width: "90%", margin: 20 }}
                 >
-                  Next Question
+                  Submit
                 </Button>
-              ) : (
-                <Container>
-                  <P2>{questions[index]}</P2>
-                  <br />
-                  {originalAudios[index].map((audio) => {
-                    return <audio src={keys.AWS + audio} controls="controls" />;
-                  })}
-                  <hr />
-                  <AudioRecord
-                    handleUpload={(file) => this.handleUpload(file)}
-                  />
-                  <br />
-                  <LinearProgress variant="determinate" value={progress} />
-                </Container>
-              )
-            ) : (
-              <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                onClick={this.handleChangeQuestion}
-                style={{ width: "90%", margin: 20 }}
-              >
-                Submit
-              </Button>
-            )}
+              )}
           </Paper>
         </Container>
         <Snackbar

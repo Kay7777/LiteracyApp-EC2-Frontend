@@ -12,8 +12,8 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 class PhonemeTrainPart extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       ids: [],
       wrongIds: [],
@@ -28,6 +28,7 @@ class PhonemeTrainPart extends React.Component {
       phonemeAssign: [],
       alert: false,
       appearTimes: {},
+      version: null
     };
   }
 
@@ -40,6 +41,7 @@ class PhonemeTrainPart extends React.Component {
       phonemes,
       answers,
       phonemeIndex,
+      version
     } = this.props.progress;
     this.setState({
       ids,
@@ -49,6 +51,7 @@ class PhonemeTrainPart extends React.Component {
       phonemes,
       answers,
       index: phonemeIndex,
+      version
     });
   };
 
@@ -118,6 +121,7 @@ class PhonemeTrainPart extends React.Component {
     // 1. Clean the student last progress and delete the old progress
     const doc1 = await axios.put("/api/phoneme/student/progress", {
       newProgress: "",
+      version: this.state.version
     });
     if (doc1.data !== "") {
       await axios.delete("/api/phoneme/student/progress/" + doc1.data);
@@ -131,10 +135,12 @@ class PhonemeTrainPart extends React.Component {
     });
     await axios.put("/api/phoneme/student/progress", {
       newProgress: doc2.data._id,
+      version: this.state.version
     });
     // show alert bar
     this.setState({ alert: true });
   };
+
   handleCloseAlert = (event, reason) => {
     if (reason === "clickaway") return;
     this.setState({ alert: false });
@@ -196,24 +202,24 @@ class PhonemeTrainPart extends React.Component {
                   ) : null}
                 </div>
               ) : (
-                <div>
-                  <P1>Congratulations, you have finished the first part</P1>
-                  <Button
-                    color="primary"
-                    size="large"
-                    variant="contained"
-                    onClick={() =>
-                      this.props.handlePhonemeAssign(phonemeAssign)
-                    }
-                  >
-                    Continue
+                  <div>
+                    <P1>Congratulations, you have finished the first part</P1>
+                    <Button
+                      color="primary"
+                      size="large"
+                      variant="contained"
+                      onClick={() =>
+                        this.props.handlePhonemeAssign(phonemeAssign)
+                      }
+                    >
+                      Continue
                   </Button>
-                </div>
-              )}
+                  </div>
+                )}
             </div>
           ) : (
-            <Process />
-          )}
+              <Process />
+            )}
         </Container>
         <Snackbar
           open={this.state.alert}

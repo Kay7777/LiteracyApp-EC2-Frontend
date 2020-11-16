@@ -14,8 +14,8 @@ function Alert(props) {
 }
 
 class PrintTrainPart extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       q1: [],
       q2: [],
@@ -31,36 +31,20 @@ class PrintTrainPart extends React.Component {
       q3Assign: [],
       q_show: 0,
       alert: false,
+      version: this.props.version
     };
   }
 
   componentDidMount = async () => {
-    const doc = await axios.get("/api/print/student/assign");
-    const { q1, q2, q3 } = this.generateAssign(doc.data);
-    const number = 1;
-    await this.setState({
-      q1: q1.slice(0, number),
-      q2: q2.slice(0, number),
-      q3: q3.slice(0, number),
-    });
-    console.log(this.state);
-  };
-
-  generateAssign = (data) => {
-    let q1 = data.q1;
-    let q2 = data.q2;
-    let q3 = data.q3;
-    console.log(q1, q2, q3);
-    while (q1.length < 20) {
-      q1 = q1.concat(q1);
+    if (this.state.version === "w1") {
+      const doc = await axios.get("/api/print/student/assign/w1");
+      const { q1, q2, q3 } = doc.data;
+      await this.setState({ q1, q2, q3 });
+    } else if (this.state.version === "w2") {
+      const doc = await axios.get("/api/print/student/assign/w2");
+      const { q1, q2, q3 } = doc.data;
+      await this.setState({ q1, q2, q3 });
     }
-    while (q2.length < 20) {
-      q2 = q2.concat(q2);
-    }
-    while (q3.length < 20) {
-      q3 = q3.concat(q3);
-    }
-    return { q1, q2, q3 };
   };
 
   handleSaveAssignment = async () => {
@@ -82,6 +66,7 @@ class PrintTrainPart extends React.Component {
     // 1. Clean the student last progress and delete the old progress
     const doc1 = await axios.put("/api/print/student/progress", {
       newProgress: "",
+      version: this.state.version
     });
     if (doc1.data !== "") {
       await axios.delete("/api/print/student/progress/" + doc1.data);
@@ -104,13 +89,14 @@ class PrintTrainPart extends React.Component {
     });
     await axios.put("/api/print/student/progress", {
       newProgress: doc2.data._id,
+      version: this.state.version
     });
     // show alert bar
     this.setState({ alert: true });
   };
 
   handleSubmit = async (q3Score, q3Assign) => {
-    const { q1Score, q2Score, q1Assign, q2Assign } = this.state;
+    const { q1Score, q2Score, q1Assign, q2Assign, version } = this.state;
     const newScore = q1Score + q2Score + q3Score;
     console.log(q1Score, q2Score, q3Score, q1Assign, q2Assign, q3Assign);
     await axios.post("/api/print/assign", {
@@ -118,6 +104,7 @@ class PrintTrainPart extends React.Component {
       q1Assign,
       q2Assign,
       q3Assign,
+      version
     });
     await axios.put("/api/print/score", { newScore });
     window.location = "/student/print";

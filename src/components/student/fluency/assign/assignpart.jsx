@@ -150,7 +150,7 @@ class FluencyAssignPart extends Component {
     // 1. Clean the student last progress and delete the old progress
     const doc1 = await axios.put("/api/fluency/student/progress", {
       newProgress: "",
-      version: this.props.version
+      version: this.state.version
     });
     if (doc1.data !== "") {
       await axios.delete("/api/fluency/student/progress/" + doc1.data);
@@ -159,7 +159,7 @@ class FluencyAssignPart extends Component {
     const doc2 = await axios.post("/api/fluency/student/progress", this.state);
     await axios.put("/api/fluency/student/progress", {
       newProgress: doc2.data._id,
-      version: this.props.version
+      version: this.state.version
     });
     // show alert bar
     this.setState({ alert: true });

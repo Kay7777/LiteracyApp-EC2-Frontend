@@ -9,27 +9,28 @@ class MeaningPractise extends React.Component {
   state = {
     start: false,
     id: "",
+    version: "w1"
   };
 
   render() {
-    const { start, id } = this.state;
+    const { start, id, version } = this.state;
     return (
       <div>
         <Container>
           {start ? (
             id === "" ? (
-              <MeaningTrain />
+              <MeaningTrain version={version} />
             ) : (
-              <MeaningProgress id={id} />
-            )
+                <MeaningProgress id={id} />
+              )
           ) : (
-            <div>
-              <MeaningHeader part="Training Assignment" />
-              <MeaningIntro
-                handleClick={(id) => this.setState({ start: !start, id })}
-              />
-            </div>
-          )}
+              <div>
+                <MeaningHeader part="Training Assignment" />
+                <MeaningIntro
+                  handleClick={(id, version) => this.setState({ start: !start, id, version })}
+                />
+              </div>
+            )}
         </Container>
       </div>
     );

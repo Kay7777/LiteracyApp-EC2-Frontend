@@ -10,8 +10,8 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 class PrintTrainPart extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       q1: [],
       q2: [],
@@ -27,6 +27,7 @@ class PrintTrainPart extends React.Component {
       q3Assign: [],
       q_show: 0,
       alert: false,
+      version: null
     };
   }
 
@@ -47,6 +48,7 @@ class PrintTrainPart extends React.Component {
       q3Questions,
       q3Score,
       q3Index,
+      version
     } = doc.data;
     if (q3Assign.length !== 0) {
       this.setState({
@@ -60,6 +62,7 @@ class PrintTrainPart extends React.Component {
         q1Index,
         q2Index,
         q3Index,
+        version
       });
     } else if (q2Assign.length !== 0) {
       this.setState({
@@ -100,6 +103,7 @@ class PrintTrainPart extends React.Component {
     // 1. Clean the student last progress and delete the old progress
     const doc1 = await axios.put("/api/print/student/progress", {
       newProgress: "",
+      version: this.state.version
     });
     if (doc1.data !== "") {
       await axios.delete("/api/print/student/progress/" + doc1.data);
@@ -122,19 +126,21 @@ class PrintTrainPart extends React.Component {
     });
     await axios.put("/api/print/student/progress", {
       newProgress: doc2.data._id,
+      version: this.state.version
     });
     // show alert bar
     this.setState({ alert: true });
   };
 
   handleSubmit = async (q3Score, q3Assign) => {
-    const { q1Score, q2Score, q1Assign, q2Assign } = this.state;
+    const { q1Score, q2Score, q1Assign, q2Assign, version } = this.state;
     const newScore = q1Score + q2Score + q3Score;
     await axios.post("/api/print/assign", {
       newScore,
       q1Assign,
       q2Assign,
       q3Assign,
+      version
     });
     await axios.put("/api/print/score", { newScore });
     window.location = "/student/print";
