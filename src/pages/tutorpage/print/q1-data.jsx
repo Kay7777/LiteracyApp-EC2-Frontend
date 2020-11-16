@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-import { TextField, Button, Container } from "@material-ui/core";
+import { TextField, Button, Container, InputLabel, Select, MenuItem } from "@material-ui/core";
 import Table from "../../../components/tutor/print/data-table/q1-table";
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -12,26 +12,33 @@ class PrintqData extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      q: [],
+      qW1: [],
+      qW2: [],
       level: "",
       question: "",
       answer: [],
       curr_answer: "",
-      alert: false,
+      alert: false, section: "w1"
     };
   }
 
   componentDidMount = async () => {
-    const doc = await axios.get("/api/print/q1");
-    this.setState({ q: doc.data });
+    const doc1 = await axios.get("/api/print/q1/w1");
+    const doc2 = await axios.get("/api/print/q1/w2");
+    if (doc1) {
+      this.setState({ qW1: doc1.data });
+    }
+    if (doc2) {
+      this.setState({ qW2: doc2.data });
+    }
   };
 
   addData = async () => {
-    const { level, question, answer } = this.state;
+    const { level, question, answer, section } = this.state;
     await axios.post("/api/print/q1", {
       level: level,
       question: question,
-      answer: answer,
+      answer: answer, version: section
     });
     await this.setState({ level: "", question: "", answer: [] });
     this.componentDidMount();
@@ -41,9 +48,11 @@ class PrintqData extends React.Component {
     await axios.delete("/api/print/q1/" + row._id);
     this.componentDidMount();
   };
-
+  handleSectionChange = (e) => {
+    this.setState({ section: e.target.value });
+  }
   render() {
-    const { q, level, question, answer, curr_answer, alert } = this.state;
+    const { qW1, qW2, level, question, answer, curr_answer, alert, section } = this.state;
 
     return (
       <div>
@@ -53,7 +62,18 @@ class PrintqData extends React.Component {
           <Button variant="contained" color="default" href="/tutor/print">
             Go back
           </Button>
-        </div>
+        </div><Container>
+          <InputLabel id="label">Assignment Section</InputLabel>
+          <Select
+            labelId="demo-controlled-open-select-label"
+            id="demo-controlled-open-select"
+            value={section}
+            onChange={this.handleSectionChange}
+          >
+            <MenuItem value="w1">Week 1</MenuItem>
+            <MenuItem value="w2">Week 2</MenuItem>
+          </Select>
+        </Container>
         <Container>
           <h5>
             Example: List at least 4 ways that the sound /k/ can be spelled?
@@ -118,10 +138,17 @@ class PrintqData extends React.Component {
           >
             Add a question
           </Button>
-          <br />
-          <br />
-          <Table data={q} handleDelete={this.deleteData} />
+
+        </Container><br /><br />
+        <Container>
+          {
+            section === "w1" ?
+              <Table data={qW1} handleDelete={this.deleteData} />
+              :
+              <Table data={qW2} handleDelete={this.deleteData} />
+          }
         </Container>
+        <br /><br />
         <Snackbar
           open={alert}
           autoHideDuration={2000}

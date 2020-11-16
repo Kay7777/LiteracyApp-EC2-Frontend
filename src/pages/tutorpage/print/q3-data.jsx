@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-import { TextField, Button, Container } from "@material-ui/core";
+import { TextField, Button, Container, InputLabel, Select, MenuItem } from "@material-ui/core";
 import Table from "../../../components/tutor/print/data-table/q3-table";
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -12,24 +12,31 @@ class PrintData extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      q: [],
+      qW1: [],
+      qW2: [],
       level: "",
       question: "",
       choice1: "",
       choice2: "",
       answer: "",
       choices: [],
-      alert: false,
+      alert: false, section: "w1"
     };
   }
 
   componentDidMount = async () => {
-    const doc = await axios.get("/api/print/q3");
-    this.setState({ q: doc.data });
+    const doc1 = await axios.get("/api/print/q3/w1");
+    const doc2 = await axios.get("/api/print/q3/w2");
+    if (doc1) {
+      this.setState({ qW1: doc1.data });
+    }
+    if (doc2) {
+      this.setState({ qW2: doc2.data });
+    }
   };
 
   addData = async () => {
-    const { level, question, choices } = this.state;
+    const { level, question, choices, section } = this.state;
     await axios.post("/api/print/q3", {
       level: level,
       question: question,
@@ -41,7 +48,7 @@ class PrintData extends React.Component {
       choice1: "",
       choice2: "",
       answer: "",
-      choices: [],
+      choices: [], version: section
     });
     this.componentDidMount();
   };
@@ -50,16 +57,19 @@ class PrintData extends React.Component {
     await axios.delete("/api/print/q3/" + row._id);
     this.componentDidMount();
   };
+  handleSectionChange = (e) => {
+    this.setState({ section: e.target.value });
+  }
   render() {
     const {
-      q,
+      qW1, qW2,
       level,
       question,
       choice1,
       choice2,
       answer,
       choices,
-      alert,
+      alert, section
     } = this.state;
 
     return (
@@ -70,7 +80,18 @@ class PrintData extends React.Component {
           <Button variant="contained" color="default" href="/tutor/print">
             Go back
           </Button>
-        </div>
+        </div><Container>
+          <InputLabel id="label">Assignment Section</InputLabel>
+          <Select
+            labelId="demo-controlled-open-select-label"
+            id="demo-controlled-open-select"
+            value={section}
+            onChange={this.handleSectionChange}
+          >
+            <MenuItem value="w1">Week 1</MenuItem>
+            <MenuItem value="w2">Week 2</MenuItem>
+          </Select>
+        </Container>
         <Container>
           <h5>
             Example: Out of word pairs below, select the one word that looks
@@ -173,9 +194,19 @@ class PrintData extends React.Component {
           <Button variant="outlined" color="primary" onClick={this.addData}>
             Add a question
           </Button>
-          <br />
-          <Table data={q} handleDelete={this.deleteData} />
+
         </Container>
+        <br />
+        <br />
+        <Container>
+          {
+            section === "w1" ?
+              <Table data={qW1} handleDelete={this.deleteData} />
+              :
+              <Table data={qW2} handleDelete={this.deleteData} />
+          }
+        </Container>
+        <br />
         <Snackbar
           open={alert}
           autoHideDuration={2000}
