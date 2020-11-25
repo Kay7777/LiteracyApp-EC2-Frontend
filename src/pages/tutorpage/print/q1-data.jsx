@@ -14,6 +14,7 @@ class PrintqData extends React.Component {
     this.state = {
       qW1: [],
       qW2: [],
+      qAccess: [],
       level: "",
       question: "",
       answer: [],
@@ -25,11 +26,15 @@ class PrintqData extends React.Component {
   componentDidMount = async () => {
     const doc1 = await axios.get("/api/print/q1/w1");
     const doc2 = await axios.get("/api/print/q1/w2");
+    const doc3 = await axios.get("/api/print/q1/access");
     if (doc1) {
       this.setState({ qW1: doc1.data });
     }
     if (doc2) {
       this.setState({ qW2: doc2.data });
+    }
+    if (doc3) {
+      this.setState({ qAccess: doc3.data });
     }
   };
 
@@ -48,8 +53,28 @@ class PrintqData extends React.Component {
     await axios.delete("/api/print/q1/" + row._id);
     this.componentDidMount();
   };
+
   handleSectionChange = (e) => {
     this.setState({ section: e.target.value });
+  }
+
+  renderTable = () => {
+    const { section, qW1, qW2, qAccess } = this.state;
+    switch (section) {
+      case "w1":
+        return <Container>
+          <Table data={qW1} handleDelete={this.deleteData} />
+        </Container>
+      case "w2":
+        return <Container>
+          <Table data={qW2} handleDelete={this.deleteData} />
+        </Container>
+      case "access":
+        return <Container>
+          <Table data={qAccess} handleDelete={this.deleteData} />
+        </Container>
+
+    }
   }
   render() {
     const { qW1, qW2, level, question, answer, curr_answer, alert, section } = this.state;
@@ -70,6 +95,7 @@ class PrintqData extends React.Component {
             value={section}
             onChange={this.handleSectionChange}
           >
+            <MenuItem value="access">Access</MenuItem>
             <MenuItem value="w1">Week 1</MenuItem>
             <MenuItem value="w2">Week 2</MenuItem>
           </Select>
@@ -140,14 +166,7 @@ class PrintqData extends React.Component {
           </Button>
 
         </Container><br /><br />
-        <Container>
-          {
-            section === "w1" ?
-              <Table data={qW1} handleDelete={this.deleteData} />
-              :
-              <Table data={qW2} handleDelete={this.deleteData} />
-          }
-        </Container>
+        {this.renderTable()}
         <br /><br />
         <Snackbar
           open={alert}

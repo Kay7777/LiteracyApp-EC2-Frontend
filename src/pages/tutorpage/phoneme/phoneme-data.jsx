@@ -9,6 +9,7 @@ class PhonemeTutorPhonemeData extends React.Component {
     this.state = {
       phonemeDataW1: [],
       phonemeDataW2: [],
+      phonemeAccess: [],
       word: "",
       phoneme: "",
       level: "",
@@ -19,11 +20,15 @@ class PhonemeTutorPhonemeData extends React.Component {
   componentDidMount = async () => {
     const doc1 = await axios.get("/api/phoneme/phoneme/table/w1");
     const doc2 = await axios.get("/api/phoneme/phoneme/table/w2");
+    const doc3 = await axios.get("/api/phoneme/phoneme/table/access");
     if (doc1) {
       this.setState({ phonemeDataW1: doc1.data });
     }
     if (doc2) {
       this.setState({ phonemeDataW2: doc2.data });
+    }
+    if (doc3) {
+      this.setState({ phonemeAccess: doc3.data });
     }
   };
 
@@ -41,6 +46,45 @@ class PhonemeTutorPhonemeData extends React.Component {
 
   handleSectionChange = (e) => {
     this.setState({ section: e.target.value });
+  }
+
+  renderTable = () => {
+    const { section, phonemeDataW1, phonemeDataW2, phonemeAccess } = this.state;
+    switch (section) {
+      case "w1":
+        return <Container>
+          <Table
+            rows={phonemeDataW1}
+            handleDelete={this.deleteData}
+            name="testData"
+            one="word"
+            two="phoneme"
+            three="level"
+          />
+        </Container>
+      case "w2":
+        return <Container>
+          <Table
+            rows={phonemeDataW2}
+            handleDelete={this.deleteData}
+            name="testData"
+            one="word"
+            two="phoneme"
+            three="level"
+          />
+        </Container>
+      case "access":
+        return <Container>
+          <Table
+            rows={phonemeAccess}
+            handleDelete={this.deleteData}
+            name="testData"
+            one="word"
+            two="phoneme"
+            three="level"
+          />
+        </Container>
+    }
   }
 
   render() {
@@ -62,6 +106,7 @@ class PhonemeTutorPhonemeData extends React.Component {
             value={section}
             onChange={this.handleSectionChange}
           >
+            <MenuItem value="access">Access</MenuItem>
             <MenuItem value="w1">Week 1</MenuItem>
             <MenuItem value="w2">Week 2</MenuItem>
           </Select>
@@ -97,30 +142,7 @@ class PhonemeTutorPhonemeData extends React.Component {
         </Container>
         <br />
         <br />
-        {
-          section === "w1" ?
-            <Container>
-              <Table
-                rows={phonemeDataW1}
-                handleDelete={this.deleteData}
-                name="testData"
-                one="word"
-                two="phoneme"
-                three="level"
-              />
-            </Container>
-            :
-            <Container>
-              <Table
-                rows={phonemeDataW2}
-                handleDelete={this.deleteData}
-                name="testData"
-                one="word"
-                two="phoneme"
-                three="level"
-              />
-            </Container>
-        }
+        {this.renderTable()}
         <br />
         <br />
       </div>

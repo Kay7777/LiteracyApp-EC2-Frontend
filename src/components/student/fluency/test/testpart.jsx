@@ -85,7 +85,6 @@ class FluencyTestPart extends Component {
       answers,
       currentParaNum,
       score,
-      speeds,
       correctNum,
       check,
     } = this.state;
@@ -187,63 +186,63 @@ class FluencyTestPart extends Component {
                 <br />
               </div>
             ) : (
-              <div>
-                <P1>You have finish all the testing questions!</P1>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={this.finishTrain}
-                  size="large"
-                >
-                  Good Job!
+                <div>
+                  <P1>You have finish all the testing questions!</P1>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={this.finishTrain}
+                    size="large"
+                  >
+                    Good Job!
                 </Button>
+                </div>
+              )
+          ) : (
+              <div>
+                <P1>{questions[currentParaNum]}</P1>
+                <FormControlLabel
+                  value={choices[currentParaNum][0]}
+                  label={choices[currentParaNum][0]}
+                  control={<Radio />}
+                  onChange={this.checkAnswer}
+                />
+                <br />
+                <FormControlLabel
+                  value={choices[currentParaNum][1]}
+                  label={choices[currentParaNum][1]}
+                  control={<Radio />}
+                  onChange={this.checkAnswer}
+                />
+                <br />
+                <FormControlLabel
+                  value={choices[currentParaNum][2]}
+                  label={choices[currentParaNum][2]}
+                  control={<Radio />}
+                  onChange={this.checkAnswer}
+                />
+                <br />
+                <FormControlLabel
+                  value={choices[currentParaNum][3]}
+                  label={choices[currentParaNum][3]}
+                  control={<Radio />}
+                  onChange={this.checkAnswer}
+                />
               </div>
             )
-          ) : (
-            <div>
-              <P1>{questions[currentParaNum]}</P1>
-              <FormControlLabel
-                value={choices[currentParaNum][0]}
-                label={choices[currentParaNum][0]}
-                control={<Radio />}
-                onChange={this.checkAnswer}
-              />
-              <br />
-              <FormControlLabel
-                value={choices[currentParaNum][1]}
-                label={choices[currentParaNum][1]}
-                control={<Radio />}
-                onChange={this.checkAnswer}
-              />
-              <br />
-              <FormControlLabel
-                value={choices[currentParaNum][2]}
-                label={choices[currentParaNum][2]}
-                control={<Radio />}
-                onChange={this.checkAnswer}
-              />
-              <br />
-              <FormControlLabel
-                value={choices[currentParaNum][3]}
-                label={choices[currentParaNum][3]}
-                control={<Radio />}
-                onChange={this.checkAnswer}
-              />
-            </div>
-          )
         ) : (
-          <div>
-            <P2>{currPara}</P2>
-            <Button
-              size="large"
-              color="primary"
-              variant="contained"
-              onClick={this.toggleReading}
-            >
-              Finish
+            <div>
+              <P2>{currPara}</P2>
+              <Button
+                size="large"
+                color="primary"
+                variant="contained"
+                onClick={this.toggleReading}
+              >
+                Finish
             </Button>
-          </div>
-        )}
+            </div>
+          )}
         <br />
         <LinearProgress variant="determinate" value={progress} />
       </Container>

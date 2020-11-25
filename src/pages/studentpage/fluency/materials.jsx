@@ -1,15 +1,16 @@
 import FluencyHeader from "../../../components/student/fluency/assets/header";
 import React from "react";
 import keys from "../../../assets/keys";
-import { Button, Container, InputLabel, Select, MenuItem } from "@material-ui/core";
+import { connect } from "react-redux";
+import { Button, Container, InputLabel, Select, MenuItem, Checkbox } from "@material-ui/core";
 import P1 from "../../../assets/fonts/p1";
 import P2 from "../../../assets/fonts/p2";
 import P3 from "../../../assets/fonts/p3";
 import axios from "axios";
 
 class FluencyMaterials extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       w1v1: null,
       w1v2: null,
@@ -71,6 +72,29 @@ class FluencyMaterials extends React.Component {
     this.setState({ section: e.target.value });
   }
 
+  handleCheckChange = async (e) => {
+    const { section } = this.state;
+    switch (section) {
+      case "w1v1":
+        await axios.put("/api/fluency/materials/w1v1");
+        window.location = "/student/fluency/learning";
+        return null;
+      case "w1v2":
+        await axios.put("/api/fluency/materials/w1v2");
+        window.location = "/student/fluency/learning";
+        return null;
+      case "w2v1":
+        await axios.put("/api/fluency/materials/w2v1");
+        window.location = "/student/fluency/learning";
+        return null;
+      case "w2v2":
+        await axios.put("/api/fluency/materials/w2v2");
+        window.location = "/student/fluency/learning";
+        return null;
+    }
+
+  }
+
   renderContent = () => {
     const { section, w1v1, w1v2, w2v1, w2v2 } = this.state;
     switch (section) {
@@ -120,6 +144,7 @@ class FluencyMaterials extends React.Component {
   }
 
   render() {
+    const { currentUser } = this.props;
     const { section } = this.state;
     return (
       <div>
@@ -137,6 +162,21 @@ class FluencyMaterials extends React.Component {
             <MenuItem value="w2v1">Week2 Video1</MenuItem>
             <MenuItem value="w2v2">Week2 Video2</MenuItem>
           </Select>
+          {
+            currentUser ?
+              <div className="row">
+                <Checkbox
+                  checked={currentUser.fluency_materials[section]}
+                  color="primary"
+                  inputProps={{ 'aria-label': 'secondary checkbox' }}
+                  onChange={this.handleCheckChange}
+                />
+                <h6 style={{ marginTop: 12 }}>I have viewed this material</h6>
+              </div>
+              :
+              null
+          }
+
         </Container><br />
         <Container>
           {this.renderContent()}
@@ -149,4 +189,8 @@ class FluencyMaterials extends React.Component {
   }
 }
 
-export default FluencyMaterials;
+const mapStateToProps = (state) => ({
+  currentUser: state.user.currentUser,
+});
+
+export default connect(mapStateToProps)(FluencyMaterials);

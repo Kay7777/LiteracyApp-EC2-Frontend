@@ -1,11 +1,12 @@
 import MeaningHeader from "../../../components/student/meaning/assets/header";
 import React from "react";
 import keys from "../../../assets/keys";
-import { Button, Container, InputLabel, Select, MenuItem } from "@material-ui/core";
+import { Button, Container, InputLabel, Select, MenuItem, Checkbox } from "@material-ui/core";
 import P1 from "../../../assets/fonts/p1";
 import P2 from "../../../assets/fonts/p2";
 import P3 from "../../../assets/fonts/p3";
 import axios from "axios";
+import { connect } from "react-redux";
 
 class MeaningMaterials extends React.Component {
   constructor() {
@@ -71,6 +72,28 @@ class MeaningMaterials extends React.Component {
     this.setState({ section: e.target.value });
   }
 
+  handleCheckChange = async (e) => {
+    const { section } = this.state;
+    switch (section) {
+      case "w1v1":
+        await axios.put("/api/meaning/materials/w1v1");
+        window.location = "/student/meaning/learning";
+        return null;
+      case "w1v2":
+        await axios.put("/api/meaning/materials/w1v2");
+        window.location = "/student/meaning/learning";
+        return null;
+      case "w2v1":
+        await axios.put("/api/meaning/materials/w2v1");
+        window.location = "/student/meaning/learning";
+        return null;
+      case "w2v2":
+        await axios.put("/api/meaning/materials/w2v2");
+        window.location = "/student/meaning/learning";
+        return null;
+    }
+  }
+
   renderContent = () => {
     const { section, w1v1, w1v2, w2v1, w2v2 } = this.state;
     switch (section) {
@@ -121,6 +144,7 @@ class MeaningMaterials extends React.Component {
 
   render() {
     const { section } = this.state;
+    const { currentUser } = this.props;
     return (
       <div>
         <MeaningHeader part="Learning Materials" />
@@ -137,6 +161,20 @@ class MeaningMaterials extends React.Component {
             <MenuItem value="w2v1">Week2 Video1</MenuItem>
             <MenuItem value="w2v2">Week2 Video2</MenuItem>
           </Select>
+          {
+            currentUser ?
+              <div className="row">
+                <Checkbox
+                  checked={currentUser.meaning_materials[section]}
+                  color="primary"
+                  inputProps={{ 'aria-label': 'secondary checkbox' }}
+                  onChange={this.handleCheckChange}
+                />
+                <h6 style={{ marginTop: 12 }}>I have viewed this material</h6>
+              </div>
+              :
+              null
+          }
         </Container><br />
         <Container>
           {this.renderContent()}
@@ -146,4 +184,8 @@ class MeaningMaterials extends React.Component {
   }
 }
 
-export default MeaningMaterials;
+const mapStateToProps = (state) => ({
+  currentUser: state.user.currentUser,
+});
+
+export default connect(mapStateToProps)(MeaningMaterials);

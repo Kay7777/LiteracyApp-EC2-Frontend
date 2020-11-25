@@ -23,13 +23,13 @@ class PhonemeTestPart extends React.Component {
   }
 
   componentDidMount = async () => {
-    const doc = await axios.get("/api/phoneme/phonemes");
+    const doc = await axios.get("/api/phoneme/phonemes/access");
     let data = doc.data;
     await this.setState({
-      words: data.words.slice(0, 10),
-      phonemes: data.phonemes.slice(0, 10),
-      levels: data.levels.slice(0, 10),
-      ids: data.ids.slice(0, 10),
+      words: data.words,
+      phonemes: data.phonemes,
+      levels: data.levels,
+      ids: data.ids,
     });
   };
 
@@ -101,8 +101,8 @@ class PhonemeTestPart extends React.Component {
             <LinearProgress variant="determinate" value={progress} />
           </div>
         ) : (
-          <Process />
-        )}
+            <Process />
+          )}
       </div>
     );
   }
