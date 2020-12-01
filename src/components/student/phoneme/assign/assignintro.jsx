@@ -14,53 +14,49 @@ class PhonemeAssignIntro extends React.Component {
     const { section } = this.state;
     if (!currentUser) return null;
     if (section === "w1") {
-      if (currentUser.phoneme_score.length === 1) {
-        switch (currentUser.phoneme_progress.w1) {
-          case "":
-            return (
+      switch (currentUser.phoneme_progress.w1) {
+        case "":
+          return (
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              style={{ marginLeft: 20, marginRight: 10 }}
+              onClick={() => this.props.handleClick("", "w1")}
+            >
+              Start
+            </Button>
+          );
+        default:
+          return (
+            <div>
+              <Button
+                variant="outlined"
+                color="primary"
+                size="large"
+                style={{ marginLeft: 20, marginRight: 10, textTransform: "none" }}
+                onClick={() =>
+                  this.props.handleClick(currentUser.phoneme_progress.w1, "w1")
+                }
+              >
+                Resume last assignment
+                </Button>
               <Button
                 variant="contained"
                 color="primary"
                 size="large"
-                style={{ marginLeft: 20, marginRight: 10 }}
+                style={{ marginRight: 10, textTransform: "none" }}
                 onClick={() => this.props.handleClick("", "w1")}
               >
-                Start
-              </Button>
-            );
-          default:
-            return (
-              <div>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  size="large"
-                  style={{ marginLeft: 20, marginRight: 10, textTransform: "none" }}
-                  onClick={() =>
-                    this.props.handleClick(currentUser.phoneme_progress.w1, "w1")
-                  }
-                >
-                  Resume last assignment
+                Start new assignment
                 </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="large"
-                  style={{ marginRight: 10, textTransform: "none" }}
-                  onClick={() => this.props.handleClick("", "w1")}
-                >
-                  Start new assignment
-                </Button>
-              </div>
-            );
-        }
-      } else {
-        return <h4 style={{ marginRight: 20 }}>You have finished assignment 1!</h4>
+            </div>
+          );
       }
     } else {
       if (new Date().getTime() - new Date(currentUser.createdAt).getTime() < 604800000) {
         return <h4 style={{ marginRight: 20 }}>You need to wait for one week to do assignment 2!</h4>
-      } else if (currentUser.phoneme_score.length === 2) {
+      } else if (currentUser.phoneme_score.length >= 2) {
         switch (currentUser.phoneme_progress.w2) {
           case "":
             return (
@@ -101,9 +97,10 @@ class PhonemeAssignIntro extends React.Component {
             );
         }
       } else if (currentUser.phoneme_score.length === 1) {
-        return <h4 style={{ marginRight: 20 }}>You need to do assignment 1 first!</h4>
-      } else {
-        return <h4 style={{ marginRight: 20 }} >You have finished assignment 2!</h4>
+        return <div>
+          <h4 style={{ marginRight: 20 }}>You need to do assignment 1 first!</h4>
+          <h5 style={{ marginRight: 20 }}>(You may have finished assignment 1, in this case, please wait for your tutor to finish marking)</h5>
+        </div>
       }
     }
   };

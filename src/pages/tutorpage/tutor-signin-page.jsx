@@ -33,7 +33,7 @@ class SignIn extends React.Component {
               Tutor Signin
             </Typography>
             <TextField
-              id="standard-basic"
+              id="standard-basic tutor-email"
               label="Email"
               style={{ width: 300, marginTop: 10 }}
               value={email}
@@ -41,7 +41,7 @@ class SignIn extends React.Component {
             />
             <br />
             <TextField
-              id="standard-basic"
+              id="standard-basic tutor-password"
               label="Password"
               type="password"
               style={{ width: 300, marginTop: 10 }}

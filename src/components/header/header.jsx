@@ -97,7 +97,7 @@ export const Header = ({ currentUser, setCurrentFont }) => {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h5" className={classes.title}>
-            Literacy Training
+            <a href="/" style={{ textDecoration: "none", color: "white" }}>Literacy Training</a>
           </Typography>
           <div style={{ marginRight: 10 }} className="row">
             <Typography variant="h6">FontSize</Typography>

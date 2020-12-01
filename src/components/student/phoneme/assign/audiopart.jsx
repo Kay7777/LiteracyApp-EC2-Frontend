@@ -35,22 +35,14 @@ class PhonemeAudioAssign extends React.Component {
 
   componentDidMount = async () => {
     const { version } = this.state;
-    const doc = await axios.get("/api/phoneme/audios", { version });
-    const { questions, audios } = this.generateAssign(doc.data);
-    const number = 20;
-    this.setState({
-      originalAudios: audios.slice(0, number),
-      questions: questions.slice(0, number),
-    });
-  };
-
-  generateAssign = (data) => {
-    let { questions, audios } = data;
-    while (questions.length < 50) {
-      questions = questions.concat(questions);
-      audios = audios.concat(audios);
+    let doc = null;
+    if (version === "w1") {
+      doc = await axios("/api/phoneme/audios/w1");
+    } else if (version === "w2") {
+      doc = await axios("/api/phoneme/audios/w2");
     }
-    return { questions, audios };
+    const { questions, audios } = doc.data;
+    this.setState({ originalAudios: audios, questions });
   };
 
   handleUpload = async (file) => {

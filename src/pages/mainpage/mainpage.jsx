@@ -37,7 +37,10 @@ const Main = ({ currentUser, currentFont }) => {
 
   return (
     <div>
-      <div className="jumbotron">{getUserOrLogin()}</div>
+      <div className="jumbotron row" >
+        <div className="col-8"> {getUserOrLogin()}</div>
+        <div className="col-4"><img src="https://www.ualberta.ca/media-library/ualberta-logo.svg" style={{ width: "100%" }} /></div>
+      </div>
       {currentUser ? (
         currentUser.role === "student" ? (
           <div className="row" style={{ paddingLeft: 100, paddingRight: 100 }}>
@@ -67,69 +70,69 @@ const Main = ({ currentUser, currentFont }) => {
             />
           </div>
         ) : (
+            <div className="row" style={{ paddingLeft: 100, paddingRight: 100 }}>
+              <MainCard
+                title={"Sound Training"}
+                page={"/tutor/phoneme"}
+                image={imagePath + images[0]}
+                description={
+                  "Modify Phoneme testing, training, and assignment questions."
+                }
+              />
+              <MainCard
+                title={"Print Training"}
+                page={"/tutor/print"}
+                image={imagePath + images[1]}
+                description={
+                  "Modify print testing, training, and assignment questions."
+                }
+              />
+              <MainCard
+                title={"Speed Training"}
+                page={"/tutor/fluency"}
+                image={imagePath + images[2]}
+                description={
+                  "Modify Fluency testing, training, and assignment questions."
+                }
+              />
+              <MainCard
+                title={"Meaning Training"}
+                page={"/tutor/meaning"}
+                image={imagePath + images[3]}
+                description={
+                  "Modify meaning testing, training, and assignment questions."
+                }
+              />
+            </div>
+          )
+      ) : (
           <div className="row" style={{ paddingLeft: 100, paddingRight: 100 }}>
             <MainCard
               title={"Sound Training"}
-              page={"/tutor/phoneme"}
+              page={"/"}
               image={imagePath + images[0]}
-              description={
-                "Modify Phoneme testing, training, and assignment questions."
-              }
+              description={"Increase your sound skills "}
             />
             <MainCard
               title={"Print Training"}
-              page={"/tutor/print"}
+              page={"/"}
               image={imagePath + images[1]}
-              description={
-                "Modify print testing, training, and assignment questions."
-              }
+              description={"Increase your spelling skills "}
             />
             <MainCard
               title={"Speed Training"}
-              page={"/tutor/fluency"}
+              page={"/"}
               image={imagePath + images[2]}
-              description={
-                "Modify Fluency testing, training, and assignment questions."
-              }
+              description={"Increase your reading speed "}
             />
             <MainCard
               title={"Meaning Training"}
-              page={"/tutor/meaning"}
+              page={"/"}
               image={imagePath + images[3]}
-              description={
-                "Modify meaning testing, training, and assignment questions."
-              }
+              description={"Increase your meaning skills "}
             />
           </div>
-        )
-      ) : (
-        <div className="row" style={{ paddingLeft: 100, paddingRight: 100 }}>
-          <MainCard
-            title={"Sound Training"}
-            page={"/"}
-            image={imagePath + images[0]}
-            description={"Increase your sound skills "}
-          />
-          <MainCard
-            title={"Print Training"}
-            page={"/"}
-            image={imagePath + images[1]}
-            description={"Increase your spelling skills "}
-          />
-          <MainCard
-            title={"Speed Training"}
-            page={"/"}
-            image={imagePath + images[2]}
-            description={"Increase your reading speed "}
-          />
-          <MainCard
-            title={"Meaning Training"}
-            page={"/"}
-            image={imagePath + images[3]}
-            description={"Increase your meaning skills "}
-          />
-        </div>
-      )}
+        )}
     </div>
   );
 };
