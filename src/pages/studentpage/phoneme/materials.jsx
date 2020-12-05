@@ -102,7 +102,7 @@ class PhonemeMaterials extends React.Component {
         if (w1v1) {
           return <div>
             <h5>{w1v1.desc}</h5>
-            <iframe width="40%" src={keys.AWS + w1v1.video}></iframe>
+            <iframe width="80%" src={"https://literacy-app-video.s3.ca-central-1.amazonaws.com/" + w1v1.video}></iframe>
 
           </div >;
         } else {
@@ -113,7 +113,7 @@ class PhonemeMaterials extends React.Component {
         if (w1v2) {
           return <div>
             <h5>{w1v2.desc}</h5>
-            <iframe width="40%" src={keys.AWS + w1v2.video}></iframe>
+            <iframe width="80%" src={"https://literacy-app-video.s3.ca-central-1.amazonaws.com/" + w1v2.video}></iframe>
 
           </div>;
         } else {
@@ -124,7 +124,7 @@ class PhonemeMaterials extends React.Component {
         if (w2v1) {
           return <div>
             <h5>{w2v1.desc}</h5>
-            <iframe width="40%" src={keys.AWS + w2v1.video}></iframe>
+            <iframe width="80%" src={"https://literacy-app-video.s3.ca-central-1.amazonaws.com/" + w2v1.video}></iframe>
 
           </div>;
         } else {
@@ -134,7 +134,7 @@ class PhonemeMaterials extends React.Component {
         if (w2v2) {
           return <div>
             <h5>{w2v2.desc}</h5>
-            <iframe width="40%" src={keys.AWS + w2v2.video}></iframe>
+            <iframe width="80%" src={"https://literacy-app-video.s3.ca-central-1.amazonaws.com/" + w2v2.video}></iframe>
 
           </div>;
         } else {
