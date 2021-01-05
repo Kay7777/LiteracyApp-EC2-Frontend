@@ -39,7 +39,7 @@ const Main = ({ currentUser, currentFont }) => {
     <div>
       <div className="jumbotron row" >
         <div className="col-8"> {getUserOrLogin()}</div>
-        <div className="col-4"><img src="https://www.ualberta.ca/media-library/ualberta-logo.svg" style={{ width: "100%" }} /></div>
+        <div className="col-4"><img src={process.env.PUBLIC_URL + "/images/rehab.png"} style={{ width: "100%" }} /></div>
       </div>
       {currentUser ? (
         currentUser.role === "student" ? (
