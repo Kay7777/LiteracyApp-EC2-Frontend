@@ -46,9 +46,9 @@ class MeaningTutorMain extends React.Component {
               description="In this part, you can modify learning materials"
             />
             <TrainCard
-              title="Modify Meaning Question 1 Data"
-              page="/tutor/meaning/q1data"
-              description="You can modify question 1 data here"
+              title="Modify Meaning Short Answer Data"
+              page="/tutor/meaning/short"
+              description="You can modify Short Answer data here"
             />
             <TrainCard
               title="Modify Meaning Question 2 Data"
@@ -56,9 +56,9 @@ class MeaningTutorMain extends React.Component {
               description="You can modify question 2 data here"
             />
             <TrainCard
-              title="Modify Meaning Question 3 Data"
-              page="/tutor/meaning/q3data"
-              description="You can modify question 3 data here"
+              title="Modify Meaning Multiple Choice Data"
+              page="/tutor/meaning/multiple"
+              description="You can modify Multiple Choice data here"
             />
           </div>
         </Container>

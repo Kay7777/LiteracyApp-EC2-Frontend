@@ -23,41 +23,29 @@ export default function SimpleTable(props) {
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell align="left">Level</TableCell>
             <TableCell align="left">Question</TableCell>
             <TableCell align="left">Choices</TableCell>
-            <TableCell align="left">Real Answer</TableCell>
-            <TableCell align="left">Student Answer</TableCell>
+            <TableCell align="left">Answer</TableCell>
+            <TableCell align="left">Operation</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {props.data.map((row, index) => (
             <TableRow key={index}>
-              <TableCell align="left">{row.level}</TableCell>
               <TableCell align="left">{row.question}</TableCell>
               <TableCell align="left">
-                {row.choices.map((dataset) => (
-                  <div>
-                    {dataset.choice1 + " / " + dataset.choice2}
-                    <br />
-                  </div>
-                ))}
+              {JSON.stringify(row.choices)}
               </TableCell>
+              <TableCell align="left">{row.answer}</TableCell>
               <TableCell align="left">
-                {row.choices.map((dataset) => (
-                  <div>
-                    {dataset.answer}
-                    <br />
-                  </div>
-                ))}
-              </TableCell>
-              <TableCell align="left">
-                {row.choices.map((dataset, i) => (
-                  <div>
-                    {row.studentAnswer ? row.studentAnswer[i] : null}
-                    <br />
-                  </div>
-                ))}
+                <Button
+                  color="secondary"
+                  variant="outlined"
+                  key={row}
+                  onClick={() => props.handleDelete(row)}
+                >
+                  Delete
+                </Button>
               </TableCell>
             </TableRow>
           ))}

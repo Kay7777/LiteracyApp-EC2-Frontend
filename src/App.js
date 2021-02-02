@@ -99,12 +99,22 @@ const PhonemeTutorOnePerformance = lazy(() =>
 const PhonemeTutorMaterials = lazy(() =>
   import("./pages/tutorpage/phoneme/materials")
 );
+const PhonemeTutorMultipleData = lazy(()=>
+  import("./pages/tutorpage/phoneme/multiple-choice-data")
+);
+const PhonemeTutorShortData = lazy(()=>
+  import("./pages/tutorpage/phoneme/short-answer-data")
+);
+const PhonemeTutorBlankData = lazy(()=>
+  import("./pages/tutorpage/phoneme/blank-data")
+);
 
 // Print Page
 const PrintTutorMain = lazy(() => import("./pages/tutorpage/print/main"));
-const PrintTutorQ1Data = lazy(() => import("./pages/tutorpage/print/q1-data"));
+const PrintTutorShortData = lazy(() => import("./pages/tutorpage/print/short-answer-data"));
 const PrintTutorQ2Data = lazy(() => import("./pages/tutorpage/print/q2-data"));
-const PrintTutorQ3Data = lazy(() => import("./pages/tutorpage/print/q3-data"));
+const PrintTutorMultipleData = lazy(() => import("./pages/tutorpage/print/multiple-choice-data"));
+const PrintTutorBlankData = lazy(() => import("./pages/tutorpage/print/blank-data"));
 const PrintTutorAllTest = lazy(() =>
   import("./pages/tutorpage/print/all-test")
 );
@@ -129,14 +139,14 @@ const PrintTutorMaterials = lazy(() =>
 
 // Meaning Page
 const MeaningTutorMain = lazy(() => import("./pages/tutorpage/meaning/main"));
-const MeaningTutorQ1Data = lazy(() =>
-  import("./pages/tutorpage/meaning/q1-data")
+const MeaningTutorShortData = lazy(() =>
+  import("./pages/tutorpage/meaning/short-answer-data")
 );
 const MeaningTutorQ2Data = lazy(() =>
   import("./pages/tutorpage/meaning/q2-data")
 );
-const MeaningTutorQ3Data = lazy(() =>
-  import("./pages/tutorpage/meaning/q3-data")
+const MeaningTutorMultipleChoiceData = lazy(() =>
+  import("./pages/tutorpage/meaning/multiple-choice-data")
 );
 const MeaningTutorAllTest = lazy(() =>
   import("./pages/tutorpage/meaning/all-test")
@@ -175,6 +185,7 @@ class App extends React.Component {
             <Suspense fallback={null}>
               <Route exact path="/" component={Main} />
               <Route exact path="/tutor/signin" component={TutorSignIn} />
+              {/* Student Fluency */}
               <Route exact path="/student/fluency" component={FluencyMain} />
               <Route
                 exact
@@ -186,6 +197,7 @@ class App extends React.Component {
                 path="/student/fluency/assignment"
                 component={FluencyAssignment}
               />
+              {/* Student Phoneme */}
               <Route exact path="/student/phoneme" component={PhonemeMain} />
               <Route
                 exact
@@ -197,6 +209,7 @@ class App extends React.Component {
                 path="/student/phoneme/assignment"
                 component={PhonemeAssignment}
               />
+              {/* Student Meaning */}
               <Route exact path="/student/meaning" component={MeaningMain} />
               <Route
                 exact
@@ -208,6 +221,7 @@ class App extends React.Component {
                 path="/student/meaning/assignment"
                 component={MeaningAssignment}
               />
+              {/* Student Print */}
               <Route exact path="/student/print" component={PrintMain} />
               <Route
                 exact
@@ -219,6 +233,7 @@ class App extends React.Component {
                 path="/student/print/assignment"
                 component={PrintAssignment}
               />
+              {/* Tutor Fluency */}
               <Route exact path="/tutor/fluency" component={FluencyTutorMain} />
               <Route
                 exact
@@ -257,6 +272,7 @@ class App extends React.Component {
                 path="/tutor/fluency/performance/:id"
                 component={FluencyTutorOnePerformance}
               />
+              {/* Tutor Phoneme */}
               <Route exact path="/tutor/phoneme" component={PhonemeTutorMain} />
               <Route
                 exact
@@ -295,21 +311,39 @@ class App extends React.Component {
                 path="/tutor/phoneme/performance/:id"
                 component={PhonemeTutorOnePerformance}
               />
+              <Route 
+                path="/tutor/phoneme/multiple"
+                component={PhonemeTutorMultipleData}
+              />
+              <Route 
+                path="/tutor/phoneme/short"
+                component={PhonemeTutorShortData}
+              />
+               <Route 
+                path="/tutor/phoneme/blank"
+                component={PhonemeTutorBlankData}
+              />
+              {/* Tutor Print */}
               <Route exact path="/tutor/print/" component={PrintTutorMain} />
               <Route
                 exact
-                path="/tutor/print/q1data"
-                component={PrintTutorQ1Data}
+                path="/tutor/print/short"
+                component={PrintTutorShortData}
               />
               <Route
                 exact
                 path="/tutor/print/q2data"
                 component={PrintTutorQ2Data}
-              />{" "}
+              />
               <Route
                 exact
-                path="/tutor/print/q3data"
-                component={PrintTutorQ3Data}
+                path="/tutor/print/multiple"
+                component={PrintTutorMultipleData}
+              />
+              <Route
+                exact
+                path="/tutor/print/blank"
+                component={PrintTutorBlankData}
               />
               <Route
                 exact
@@ -338,6 +372,7 @@ class App extends React.Component {
                 path="/tutor/print/performance/:id"
                 component={PrintTutorOnePerform}
               />
+                 {/* Tutor Meaning */}
               <Route
                 exact
                 path="/tutor/meaning/"
@@ -345,8 +380,8 @@ class App extends React.Component {
               />
               <Route
                 exact
-                path="/tutor/meaning/q1data"
-                component={MeaningTutorQ1Data}
+                path="/tutor/meaning/short"
+                component={MeaningTutorShortData}
               />
               <Route
                 exact
@@ -355,8 +390,8 @@ class App extends React.Component {
               />
               <Route
                 exact
-                path="/tutor/meaning/q3data"
-                component={MeaningTutorQ3Data}
+                path="/tutor/meaning/multiple"
+                component={MeaningTutorMultipleChoiceData}
               />
               <Route
                 exact
@@ -385,6 +420,7 @@ class App extends React.Component {
                 path="/tutor/meaning/performance/:id"
                 component={MeaningTutorOnePerform}
               />
+                 {/* Tutor Fluency */}
               <Route
                 path="/tutor/fluency/materials"
                 component={FluencyTutorMaterials}

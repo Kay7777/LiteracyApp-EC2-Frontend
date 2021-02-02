@@ -1,45 +1,45 @@
 import React from "react";
 import axios from "axios";
 import { TextField, Button, Container, InputLabel, Select, MenuItem } from "@material-ui/core";
-import Table from "../../../components/tutor/phoneme/phonemetable";
+import Table from "../../../components/tutor/phoneme/short-answer-table";
 
 class PhonemeTutorPhonemeData extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      phonemeDataW1: [],
-      phonemeDataW2: [],
-      phonemeAccess: [],
-      word: "",
-      phoneme: "",
+      shortAnswerDataW1: [],
+      shortAnswerDataW2: [],
+      shortAnswerAccess: [],
+      question: "",
+      answers: "",
       section: "w1",
     };
   }
 
   componentDidMount = async () => {
-    const doc1 = await axios.get("/api/phoneme/phoneme/table/w1");
-    const doc2 = await axios.get("/api/phoneme/phoneme/table/w2");
-    const doc3 = await axios.get("/api/phoneme/phoneme/table/access");
+    const doc1 = await axios.get("/api/phoneme/short/table/w1");
+    const doc2 = await axios.get("/api/phoneme/short/table/w2");
+    const doc3 = await axios.get("/api/phoneme/short/table/access");
     if (doc1) {
-      this.setState({ phonemeDataW1: doc1.data });
+      this.setState({ shortAnswerDataW1: doc1.data });
     }
     if (doc2) {
-      this.setState({ phonemeDataW2: doc2.data });
+      this.setState({ shortAnswerDataW2: doc2.data });
     }
     if (doc3) {
-      this.setState({ phonemeAccess: doc3.data });
+      this.setState({ shortAnswerAccess: doc3.data });
     }
   };
 
   addNewData = async () => {
-    const { word, phoneme, section } = this.state;
-    await axios.post("/api/phoneme/phoneme", { word, phoneme, version: section });
-    await this.setState({ word: "", phoneme: ""});
+    const {  answers, question, section } = this.state;
+    await axios.post("/api/phoneme/short", { answers: answers.split(","), question, version: section });
+    await this.setState({ answers: "", question: "" });
     this.componentDidMount();
   };
 
   deleteData = async (id) => {
-    await axios.delete("/api/phoneme/phoneme/" + id);
+    await axios.delete("/api/phoneme/short/" + id);
     this.componentDidMount();
   };
 
@@ -48,47 +48,38 @@ class PhonemeTutorPhonemeData extends React.Component {
   }
 
   renderTable = () => {
-    const { section, phonemeDataW1, phonemeDataW2, phonemeAccess } = this.state;
+    const { section, shortAnswerDataW1, shortAnswerDataW2, shortAnswerAccess } = this.state;
     switch (section) {
       case "w1":
         return <Container>
           <Table
-            rows={phonemeDataW1}
+            rows={shortAnswerDataW1}
             handleDelete={this.deleteData}
-            name="testData"
-            one="word"
-            two="phoneme"
           />
         </Container>
       case "w2":
         return <Container>
           <Table
-            rows={phonemeDataW2}
+            rows={shortAnswerDataW2}
             handleDelete={this.deleteData}
-            name="testData"
-            one="word"
-            two="phoneme"
           />
         </Container>
       case "access":
         return <Container>
           <Table
-            rows={phonemeAccess}
+            rows={shortAnswerAccess}
             handleDelete={this.deleteData}
-            name="testData"
-            one="word"
-            two="phoneme"
           />
         </Container>
     }
   }
 
   render() {
-    const { word, phoneme, phonemeDataW1, phonemeDataW2, section } = this.state;
+    const { question, answers, section } = this.state;
     return (
       <div>
         <div className="jumbotron">
-          <h2>Modify the Phoneme Data</h2>
+          <h2>Modify the Short Answers Question Data</h2>
           <hr />
           <Button variant="contained" color="default" href="/tutor/phoneme">
             Go back
@@ -110,23 +101,26 @@ class PhonemeTutorPhonemeData extends React.Component {
         <Container>
           <TextField
             id="standard-basic"
-            label="Word"
-            value={word}
+            label="question"
+            value={question}
             autoComplete="off"
-            style={{ marginRight: 20 }}
-            onChange={(e) => this.setState({ word: e.target.value })}
+            style={{ marginRight: 20, width: 400}}
+            onChange={(e) => this.setState({ question: e.target.value })}
           />
+          <br />
           <TextField
             id="standard-basic"
-            label="Phoneme"
-            value={phoneme}
+            label="answers"
+            value={answers}
             autoComplete="off"
-            style={{ marginRight: 20 }}
-            onChange={(e) => this.setState({ phoneme: e.target.value })}
+            style={{ marginRight: 20, width: 200}}
+            onChange={(e) => this.setState({ answers: e.target.value })}
           />
-          <Button variant="contained" color="primary" onClick={this.addNewData}>
+           <Button variant="contained" color="primary" style={{ marginLeft: 5, marginTop: 10}} onClick={this.addNewData}>
             Add
           </Button>
+          <p>(Using comma to separate choices and answers, no space is required, like qwe,asd,zxc)</p>
+         
         </Container>
         <br />
         <br />

@@ -23,40 +23,21 @@ export default function SimpleTable(props) {
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell align="left">Level</TableCell>
-            <TableCell align="left">Question</TableCell>
-            <TableCell align="left">Choices</TableCell>
-            <TableCell align="left">Answer</TableCell>
-            <TableCell align="left">Operation</TableCell>
+            <TableCell align="right">Question</TableCell>
+            <TableCell align="right">Answer</TableCell>
+            <TableCell align="right">Operation</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.data.map((row, index) => (
+          {props.rows.map((row, index) => (
             <TableRow key={index}>
-              <TableCell align="left">{row.level}</TableCell>
-              <TableCell align="left">{row.question}</TableCell>
-              <TableCell align="left">
-                {row.choices.map((dataset) => (
-                  <div>
-                    {dataset.choice1 + " / " + dataset.choice2}
-                    <br />
-                  </div>
-                ))}
-              </TableCell>
-              <TableCell align="left">
-                {row.choices.map((dataset) => (
-                  <div>
-                    {dataset.answer}
-                    <br />
-                  </div>
-                ))}
-              </TableCell>
-              <TableCell align="left">
+              <TableCell align="right">{row.question}</TableCell>
+              <TableCell align="right">{JSON.stringify(row.answer)}</TableCell>
+              <TableCell align="right">
                 <Button
                   color="secondary"
-                  variant="outlined"
-                  key={row}
-                  onClick={() => props.handleDelete(row)}
+                  key={row._id}
+                  onClick={() => props.handleDelete(row._id)}
                 >
                   Delete
                 </Button>

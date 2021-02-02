@@ -3,7 +3,7 @@ import axios from "axios";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import { TextField, Button, Container, InputLabel, Select, MenuItem } from "@material-ui/core";
-import Table from "../../../components/tutor/meaning/data-table/q3-table";
+import Table from "../../../components/tutor/meaning/data-table/multiple-choice-table";
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -16,7 +16,6 @@ class MeaningData extends React.Component {
       qW2: [],
       qAccess: [],
       section: "w1",
-      level: "",
       question: "",
       choice1: "",
       choice2: "",
@@ -28,9 +27,9 @@ class MeaningData extends React.Component {
   }
 
   componentDidMount = async () => {
-    const doc1 = await axios.get("/api/meaning/q3/w1");
-    const doc2 = await axios.get("/api/meaning/q3/w2");
-    const doc3 = await axios.get("/api/meaning/q3/access");
+    const doc1 = await axios.get("/api/meaning/multiple/w1");
+    const doc2 = await axios.get("/api/meaning/multiple/w2");
+    const doc3 = await axios.get("/api/meaning/multiple/access");
     if (doc1) {
       this.setState({ qW1: doc1.data });
     }
@@ -44,7 +43,6 @@ class MeaningData extends React.Component {
 
   addData = async () => {
     const {
-      level,
       question,
       choice1,
       choice2,
@@ -53,15 +51,13 @@ class MeaningData extends React.Component {
       answer,
       section,
     } = this.state;
-    await axios.post("/api/meaning/q3", {
-      level,
+    await axios.post("/api/meaning/multiple", {
       question,
       choices: [choice1, choice2, choice3, choice4],
       answer,
       version: section
     });
     await this.setState({
-      level: "",
       question: "",
       choice1: "",
       choice2: "",
@@ -73,7 +69,7 @@ class MeaningData extends React.Component {
   };
 
   deleteData = async (row) => {
-    await axios.delete("/api/meaning/q3/" + row._id);
+    await axios.delete("/api/meaning/multiple/" + row._id);
     this.componentDidMount();
   };
 
@@ -102,7 +98,6 @@ class MeaningData extends React.Component {
   render() {
     const {
       section,
-      level,
       question,
       choice1,
       choice2,
@@ -149,13 +144,6 @@ class MeaningData extends React.Component {
           <li>floxatist</li>
           <li>floxatation</li>
           <TextField
-            label="level"
-            value={level}
-            autoComplete="off"
-            style={{ marginRight: 10 }}
-            onChange={(e) => this.setState({ level: e.target.value })}
-          />
-          <TextField
             label="question"
             value={question}
             style={{ width: 500 }}
@@ -198,10 +186,8 @@ class MeaningData extends React.Component {
             style={{ marginRight: 10 }}
             onChange={(e) => this.setState({ answer: e.target.value })}
           />
-          <br />
-          <br />
-          <Button variant="contained" color="primary" onClick={this.addData}>
-            Add a question
+          <Button variant="contained" color="primary" style={{ marginLeft: 5, marginTop: 10 }} onClick={this.addData}>
+            Add
           </Button>
         </Container>
         <br />

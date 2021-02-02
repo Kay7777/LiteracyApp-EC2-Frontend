@@ -23,8 +23,8 @@ export default function SimpleTable(props) {
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell align="left">Level</TableCell>
             <TableCell align="left">Question</TableCell>
+            <TableCell align="left">Choices</TableCell>
             <TableCell align="left">Real Answer</TableCell>
             <TableCell align="left">Student Answer</TableCell>
           </TableRow>
@@ -32,13 +32,30 @@ export default function SimpleTable(props) {
         <TableBody>
           {props.data.map((row, index) => (
             <TableRow key={index}>
-              <TableCell align="left">{row.level}</TableCell>
               <TableCell align="left">{row.question}</TableCell>
               <TableCell align="left">
-                {row.realAnswer.map((answer) => answer + ",")}
+                {row.choices.map((dataset) => (
+                  <div>
+                    {dataset.choice1 + "/" + dataset.choice2}
+                    <br />
+                  </div>
+                ))}
               </TableCell>
               <TableCell align="left">
-                {row.realAnswer.map((answer, i) => row.studentAnswer[i] + ",")}
+                {row.choices.map((dataset) => (
+                  <div>
+                    {dataset.answer}
+                    <br />
+                  </div>
+                ))}
+              </TableCell>
+              <TableCell align="left">
+                {row.choices.map((dataset, i) => (
+                  <div>
+                    {row.studentAnswer ? row.studentAnswer[i] : null}
+                    <br />
+                  </div>
+                ))}
               </TableCell>
             </TableRow>
           ))}

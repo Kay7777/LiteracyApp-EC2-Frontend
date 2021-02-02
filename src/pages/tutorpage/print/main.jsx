@@ -46,9 +46,9 @@ class PrintTutorMain extends React.Component {
               description="In this part, you can modify learning materials"
             />
             <TrainCard
-              title="Modify Print Question 1 Data"
-              page="/tutor/print/q1data"
-              description="You can modify question 1 data here"
+              title="Modify Print Short-Answer Question Data"
+              page="/tutor/print/short"
+              description="You can modify Print Short-answer Question data here"
             />
             <TrainCard
               title="Modify Print Question 2 Data"
@@ -56,9 +56,14 @@ class PrintTutorMain extends React.Component {
               description="You can modify question 2 data here"
             />
             <TrainCard
-              title="Modify Print Question 3 Data"
-              page="/tutor/print/q3data"
-              description="You can modify question 3 data here"
+              title="Modify Print Multiple Choice Data"
+              page="/tutor/print/multiple"
+              description="You can modify Multiple Choice question here"
+            />
+             <TrainCard
+              title="Modify Print Blank Question Data"
+              page="/tutor/print/blank"
+              description="You can modify Print blank Question data here"
             />
           </div>
         </Container>

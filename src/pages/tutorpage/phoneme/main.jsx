@@ -51,6 +51,21 @@ class PhonemeTutorMain extends React.Component {
               page="/tutor/phoneme/audiodata"
               description="In this part, you can modify audio data"
             />
+             <TrainCard
+              title="Modify Multiple Choices data"
+              page="/tutor/phoneme/multiple"
+              description="In this part, you can modify mutiple-choice question data"
+            />
+             <TrainCard
+              title="Modify Short Answer data"
+              page="/tutor/phoneme/short"
+              description="In this part, you can modify short-answer question data"
+            />
+             <TrainCard
+              title="Modify Blank data"
+              page="/tutor/phoneme/blank"
+              description="In this part, you can modify blank question data"
+            />
           </div>
         </Container>
       </div>

@@ -11,7 +11,6 @@ class PhonemeTutorAssign extends React.Component {
       traindata: [],
       assignAddWord: "",
       assignAddPhoneme: "",
-      assignAddLevel: "",
       assigndata: [],
       assignNum: 20,
     };
@@ -28,13 +27,11 @@ class PhonemeTutorAssign extends React.Component {
     const {
       assignAddWord,
       assignAddPhoneme,
-      assignAddLevel,
       assigndata,
     } = this.state;
     const newEntry = {
       word: assignAddWord,
       phoneme: assignAddPhoneme,
-      level: assignAddLevel,
     };
     const newAssign = assigndata;
     newAssign.push(newEntry);
@@ -42,7 +39,6 @@ class PhonemeTutorAssign extends React.Component {
       assigndata: newAssign,
       assignAddWord: "",
       assignAddPhoneme: "",
-      assignAddLevel: "",
     });
   };
 
@@ -69,7 +65,6 @@ class PhonemeTutorAssign extends React.Component {
     const {
       assignAddWord,
       assignAddPhoneme,
-      assignAddLevel,
       assigndata,
       assignNum,
       alert,
@@ -104,16 +99,7 @@ class PhonemeTutorAssign extends React.Component {
                 onChange={(e) =>
                   this.setState({ assignAddPhoneme: e.target.value })
                 }
-              />
-              <TextField
-                id="standard-basic"
-                label="Level"
-                value={assignAddLevel}
-                autoComplete="off"
-                onChange={(e) =>
-                  this.setState({ assignAddLevel: e.target.value })
-                }
-              />
+                />
               <Button
                 variant="outlined"
                 color="primary"
@@ -144,7 +130,6 @@ class PhonemeTutorAssign extends React.Component {
             name="New Assignment"
             one="word"
             two="phoneme"
-            three="level"
           />
         </Container>
       </div>

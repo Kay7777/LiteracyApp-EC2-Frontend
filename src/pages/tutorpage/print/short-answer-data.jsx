@@ -3,12 +3,12 @@ import axios from "axios";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import { TextField, Button, Container, InputLabel, Select, MenuItem } from "@material-ui/core";
-import Table from "../../../components/tutor/print/data-table/q2-table";
+import Table from "../../../components/tutor/print/data-table/short-answer-table";
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-class PrintData extends React.Component {
+class PrintqData extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,16 +16,15 @@ class PrintData extends React.Component {
       qW2: [],
       qAccess: [],
       question: "",
-      choice: "",
       answer: "",
       alert: false, section: "w1"
     };
   }
 
   componentDidMount = async () => {
-    const doc1 = await axios.get("/api/print/q2/w1");
-    const doc2 = await axios.get("/api/print/q2/w2");
-    const doc3 = await axios.get("/api/print/q2/access");
+    const doc1 = await axios.get("/api/print/short/w1");
+    const doc2 = await axios.get("/api/print/short/w2");
+    const doc3 = await axios.get("/api/print/short/access");
     if (doc1) {
       this.setState({ qW1: doc1.data });
     }
@@ -38,23 +37,17 @@ class PrintData extends React.Component {
   };
 
   addData = async () => {
-    const { question, choice, answer, section } = this.state;
-    await axios.post("/api/print/q2", {
+    const { question, answer, section } = this.state;
+    await axios.post("/api/print/short", {
       question: question,
-      answer: answer,
-      choices: choice.split(","),
-      version: section
+      answer: answer.split(","), version: section
     });
-    this.setState({
-      question: "",
-      choices: [],
-      answer: "",
-    });
+    await this.setState({ question: "", answer: [] });
     this.componentDidMount();
   };
 
   deleteData = async (row) => {
-    await axios.delete("/api/print/q2/" + row._id);
+    await axios.delete("/api/print/short/" + row._id);
     this.componentDidMount();
   };
 
@@ -77,22 +70,16 @@ class PrintData extends React.Component {
         return <Container>
           <Table data={qAccess} handleDelete={this.deleteData} />
         </Container>
+
     }
   }
-
   render() {
-    const {
-      qW1, qW2,
-      question,
-      answer,
-      choice,
-      alert, section
-    } = this.state;
+    const { qW1, qW2, question, answer, alert, section } = this.state;
 
     return (
       <div>
         <div className="jumbotron">
-          <h2>Modify Print Question 2 Data</h2>
+          <h2>Modify Print Short Answer Question Data</h2>
           <hr />
           <Button variant="contained" color="default" href="/tutor/print">
             Go back
@@ -112,12 +99,8 @@ class PrintData extends React.Component {
         </Container>
         <Container>
           <h5>
-            Example: From the list of options below, choose all the correct ways
-            that the sound /f/ can be spelled?
+            Example: List at least 4 ways that the sound /k/ can be spelled?
           </h5>
-          <li>/ff/</li>
-          <li>/fg/</li>
-          <li>/ft/</li>
           <TextField
             label="question"
             style={{ width: 500 }}
@@ -127,23 +110,21 @@ class PrintData extends React.Component {
           />
           <br />
           <TextField
-            label="choices"
-            autoComplete="off"
-            value={choice}
-            style={{ marginRight: 10, width: 300 }}
-            onChange={(e) => this.setState({ choice: e.target.value })}
-          />
-          <TextField
             label="answer"
             autoComplete="off"
             value={answer}
-            style={{ marginRight: 10 }}
+            style={{width: 300}}
             onChange={(e) => this.setState({ answer: e.target.value })}
           />
-          <Button variant="contained" color="primary" style={{marginLeft:5, marginTop:10}} onClick={this.addData}>
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ marginLeft: 5 , marginTop: 10}}
+            onClick={this.addData}
+          >
             Add
           </Button>
-          <p>(you can enter multiple choices separating by commas)</p>
+          <p>(you can enter multiple answers separating by commas)</p>
         </Container><br /><br />
         {this.renderTable()}
         <br /><br />
@@ -161,4 +142,4 @@ class PrintData extends React.Component {
   }
 }
 
-export default PrintData;
+export default PrintqData;

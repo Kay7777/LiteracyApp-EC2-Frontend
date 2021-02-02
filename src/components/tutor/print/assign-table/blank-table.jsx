@@ -23,23 +23,25 @@ export default function SimpleTable(props) {
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell align="left">Level</TableCell>
-            <TableCell align="left">Question</TableCell>
-            <TableCell align="left">Choices</TableCell>
-            <TableCell align="left">Real Answer</TableCell>
-            <TableCell align="left">Student's Answer</TableCell>
+            <TableCell align="right">Question</TableCell>
+            <TableCell align="right">Answer</TableCell>
+            <TableCell align="right">Operation</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.data.map((row, index) => (
+          {props.rows.map((row, index) => (
             <TableRow key={index}>
-              <TableCell align="left">{row.level}</TableCell>
-              <TableCell align="left">{row.question}</TableCell>
-              <TableCell align="left">
-                {row.choices.map((choice) => choice + ",")}
+              <TableCell align="right">{row.question}</TableCell>
+              <TableCell align="right">{JSON.stringify(row.answer)}</TableCell>
+              <TableCell align="right">
+                <Button
+                  color="secondary"
+                  key={row._id}
+                  onClick={() => props.handleDelete(row._id)}
+                >
+                  Delete
+                </Button>
               </TableCell>
-              <TableCell align="left">{row.answer}</TableCell>
-              <TableCell align="left">{row.studentAnswer}</TableCell>
             </TableRow>
           ))}
         </TableBody>

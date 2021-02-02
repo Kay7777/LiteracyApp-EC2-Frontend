@@ -24,8 +24,8 @@ export default function SimpleTable(props) {
         <TableHead>
           <TableRow>
             <TableCell align="left">Question</TableCell>
-            <TableCell align="left">Answer</TableCell>
-            <TableCell align="left">Operation</TableCell>
+            <TableCell align="left">Real Answer</TableCell>
+            <TableCell align="left">Student Answer</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -33,17 +33,10 @@ export default function SimpleTable(props) {
             <TableRow key={index}>
               <TableCell align="left">{row.question}</TableCell>
               <TableCell align="left">
-              {JSON.stringify(row.answer)}
+                {row.realAnswer.map((answer) => answer + ",")}
               </TableCell>
               <TableCell align="left">
-                <Button
-                  color="secondary"
-                  variant="outlined"
-                  key={row}
-                  onClick={() => props.handleDelete(row)}
-                >
-                  Delete
-                </Button>
+                {row.realAnswer.map((answer, i) => row.studentAnswer[i] + ",")}
               </TableCell>
             </TableRow>
           ))}

@@ -34,7 +34,6 @@ export default function SimpleTable(props) {
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell align="left">Level</TableCell>
             <TableCell align="left">Word</TableCell>
             <TableCell align="left">Phoneme</TableCell>
             <TableCell align="left">Answer</TableCell>
@@ -44,7 +43,6 @@ export default function SimpleTable(props) {
         <TableBody>
           {props.rows.map((row, index) => (
             <TableRow key={index}>
-              <TableCell align="left">{row.level}</TableCell>
               <TableCell align="left">{row.word}</TableCell>
               <TableCell align="left">{row.phoneme}</TableCell>
               <TableCell align="left">{row.answer}</TableCell>

@@ -1,9 +1,9 @@
 import React from "react";
 import axios from "axios";
 import { Button, Container } from "@material-ui/core";
-import Q1Table from "../../../components/tutor/print/assign-table/q1-table";
+import Q1Table from "../../../components/tutor/print/assign-table/short-answer-table";
 import Q2Table from "../../../components/tutor/print/assign-table/q2-table";
-import Q3Table from "../../../components/tutor/print/assign-table/q3-table";
+import Q3Table from "../../../components/tutor/print/assign-table/multiple-choice-table";
 
 class PrintTutorTestOneAssign extends React.Component {
   constructor(props) {

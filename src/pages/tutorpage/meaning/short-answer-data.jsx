@@ -3,7 +3,7 @@ import axios from "axios";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import { TextField, Button, Container, InputLabel, Select, MenuItem } from "@material-ui/core";
-import Table from "../../../components/tutor/meaning/data-table/q1-table";
+import Table from "../../../components/tutor/meaning/data-table/short-answer-table";
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -15,19 +15,17 @@ class MeaningqData extends React.Component {
       qW1: [],
       qW2: [],
       qAccess: [],
-      level: "",
       question: "",
-      answer: [],
-      curr_answer: "",
+      answer: "",
       alert: false,
       section: "w1"
     };
   }
 
   componentDidMount = async () => {
-    const doc1 = await axios.get("/api/meaning/q1/w1");
-    const doc2 = await axios.get("/api/meaning/q1/w2");
-    const doc3 = await axios.get("/api/meaning/q1/access");
+    const doc1 = await axios.get("/api/meaning/short/w1");
+    const doc2 = await axios.get("/api/meaning/short/w2");
+    const doc3 = await axios.get("/api/meaning/short/access");
     if (doc1) {
       this.setState({ qW1: doc1.data });
     }
@@ -40,19 +38,18 @@ class MeaningqData extends React.Component {
   };
 
   addData = async () => {
-    const { level, question, answer, section } = this.state;
-    await axios.post("/api/meaning/q1", {
-      level: level,
+    const { question, answer, section } = this.state;
+    await axios.post("/api/meaning/short", {
       question: question,
-      answer: answer,
+      answer: answer.split(","),
       version: section
     });
-    await this.setState({ level: "", question: "", answer: [] });
+    await this.setState({ question: "", answer: [] });
     this.componentDidMount();
   };
 
   deleteData = async (row) => {
-    await axios.delete("/api/meaning/q1/" + row._id);
+    await axios.delete("/api/meaning/short/" + row._id);
     this.componentDidMount();
   };
 
@@ -79,7 +76,7 @@ class MeaningqData extends React.Component {
   }
 
   render() {
-    const { section, level, question, answer, curr_answer, alert } = this.state;
+    const { section, question, answer, alert } = this.state;
 
     return (
       <div>
@@ -109,14 +106,6 @@ class MeaningqData extends React.Component {
             What are the two meanings of the prefix -in? Give at least one
             example for each meaning. (hint: inject, invisible)
           </h5>
-
-          <TextField
-            label="level"
-            value={level}
-            autoComplete="off"
-            style={{ marginRight: 5 }}
-            onChange={(e) => this.setState({ level: e.target.value })}
-          />
           <TextField
             label="question"
             style={{ width: 500 }}
@@ -128,49 +117,19 @@ class MeaningqData extends React.Component {
           <TextField
             label="answer"
             autoComplete="off"
-            value={curr_answer}
-            onChange={(e) => this.setState({ curr_answer: e.target.value })}
+            value={answer}
+            style={{width: 200}}
+            onChange={(e) => this.setState({ answer: e.target.value })}
           />
           <Button
             variant="contained"
             color="primary"
-            style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}
-            onClick={() =>
-              this.setState((state) => {
-                const answer = state.answer;
-                answer.push(curr_answer);
-                this.setState({ curr_answer: "" });
-                return { answer, ...state };
-              })
-            }
-          >
-            Add an answer
-          </Button>
-          <Button
-            variant="outlined"
-            color="secondary"
-            style={{ marginTop: 10 }}
-            onClick={() => this.setState({ answer: [] })}
-          >
-            empty answers
-          </Button>
-          <br />
-          <div className="row" style={{ marginTop: 10, marginLeft: 10 }}>
-            <h5>Answers you entered:</h5>
-            <h4>{answer.map((answer) => answer + ",")}</h4>
-          </div>
-          <h5>
-            (You can provide multiple correct answers, but do not include / )
-          </h5>
-          <Button
-            variant="contained"
-            color="primary"
-            style={{ marginRight: 5 }}
+            style={{ marginLeft: 5, marginTop: 10 }}
             onClick={this.addData}
           >
-            Add a question
+            Add
           </Button>
-
+          <p>(You can provide multiple correct answers and separate them by comma )</p>
         </Container>
         <br />
         <br />
