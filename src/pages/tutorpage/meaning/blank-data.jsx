@@ -3,12 +3,12 @@ import axios from "axios";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import { TextField, Button, Container, InputLabel, Select, MenuItem } from "@material-ui/core";
-import Table from "../../../components/tutor/print/data-table/q2-table";
+import Table from "../../../components/tutor/meaning/data-table/blank-table";
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-class PrintData extends React.Component {
+class MeaningData extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,16 +16,16 @@ class PrintData extends React.Component {
       qW2: [],
       qAccess: [],
       question: "",
-      choice: "",
       answer: "",
-      alert: false, section: "w1"
+      alert: false,
+      section: "w1"
     };
   }
 
   componentDidMount = async () => {
-    const doc1 = await axios.get("/api/print/q2/w1");
-    const doc2 = await axios.get("/api/print/q2/w2");
-    const doc3 = await axios.get("/api/print/q2/access");
+    const doc1 = await axios.get("/api/meaning/blank/w1");
+    const doc2 = await axios.get("/api/meaning/blank/w2");
+    const doc3 = await axios.get("/api/meaning/blank/access");
     if (doc1) {
       this.setState({ qW1: doc1.data });
     }
@@ -38,23 +38,16 @@ class PrintData extends React.Component {
   };
 
   addData = async () => {
-    const { question, choice, answer, section } = this.state;
-    await axios.post("/api/print/q2", {
-      question: question,
-      answer: answer,
-      choices: choice.split(","),
-      version: section
+    const {  question, answer, section } = this.state;
+    await axios.post("/api/meaning/blank", {
+      question, answer, version: section
     });
-    this.setState({
-      question: "",
-      choices: [],
-      answer: "",
-    });
+    await this.setState({  question: "", answer: "" });
     this.componentDidMount();
   };
 
   deleteData = async (row) => {
-    await axios.delete("/api/print/q2/" + row._id);
+    await axios.delete("/api/meaning/blank/" + row._id);
     this.componentDidMount();
   };
 
@@ -81,23 +74,18 @@ class PrintData extends React.Component {
   }
 
   render() {
-    const {
-      qW1, qW2,
-      question,
-      answer,
-      choice,
-      alert, section
-    } = this.state;
+    const { section, question, answer, alert } = this.state;
 
     return (
       <div>
         <div className="jumbotron">
-          <h2>Modify Print Question 2 Data</h2>
+          <h2>Modify Meaning Blank Question Data</h2>
           <hr />
-          <Button variant="contained" color="default" href="/tutor/print">
+          <Button variant="contained" color="default" href="/tutor/meaning">
             Go back
           </Button>
-        </div><Container>
+        </div>
+        <Container>
           <InputLabel id="label">Assignment Section</InputLabel>
           <Select
             labelId="demo-controlled-open-select-label"
@@ -112,12 +100,9 @@ class PrintData extends React.Component {
         </Container>
         <Container>
           <h5>
-            Example: From the list of options below, choose all the correct ways
-            that the sound /f/ can be spelled?
+            Example: When we combine the sounds /n/, /oi/ and /s/, it makes the word ____.
           </h5>
-          <li>/ff/</li>
-          <li>/fg/</li>
-          <li>/ft/</li>
+          <h5>Answer: noise</h5>
           <TextField
             label="question"
             style={{ width: 500 }}
@@ -127,26 +112,26 @@ class PrintData extends React.Component {
           />
           <br />
           <TextField
-            label="choices"
-            autoComplete="off"
-            value={choice}
-            style={{ marginRight: 10, width: 300 }}
-            onChange={(e) => this.setState({ choice: e.target.value })}
-          />
-          <TextField
             label="answer"
             autoComplete="off"
             value={answer}
-            style={{ marginRight: 10 }}
+            style={{ width: 200 }}
             onChange={(e) => this.setState({ answer: e.target.value })}
           />
-          <Button variant="contained" color="primary" style={{marginLeft:5, marginTop:10}} onClick={this.addData}>
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ marginLeft: 5, marginTop: 10 }}
+            onClick={this.addData}
+          >
             Add
           </Button>
-          <p>(you can enter multiple choices separating by commas)</p>
-        </Container><br /><br />
+        </Container>
+        <br />
+        <br />
         {this.renderTable()}
-        <br /><br />
+        <br />
+        <br />
         <Snackbar
           open={alert}
           autoHideDuration={2000}
@@ -161,4 +146,4 @@ class PrintData extends React.Component {
   }
 }
 
-export default PrintData;
+export default MeaningData;

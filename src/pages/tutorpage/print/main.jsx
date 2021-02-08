@@ -51,11 +51,6 @@ class PrintTutorMain extends React.Component {
               description="You can modify Print Short-answer Question data here"
             />
             <TrainCard
-              title="Modify Print Question 2 Data"
-              page="/tutor/print/q2data"
-              description="You can modify question 2 data here"
-            />
-            <TrainCard
               title="Modify Print Multiple Choice Data"
               page="/tutor/print/multiple"
               description="You can modify Multiple Choice question here"

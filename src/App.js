@@ -112,7 +112,6 @@ const PhonemeTutorBlankData = lazy(()=>
 // Print Page
 const PrintTutorMain = lazy(() => import("./pages/tutorpage/print/main"));
 const PrintTutorShortData = lazy(() => import("./pages/tutorpage/print/short-answer-data"));
-const PrintTutorQ2Data = lazy(() => import("./pages/tutorpage/print/q2-data"));
 const PrintTutorMultipleData = lazy(() => import("./pages/tutorpage/print/multiple-choice-data"));
 const PrintTutorBlankData = lazy(() => import("./pages/tutorpage/print/blank-data"));
 const PrintTutorAllTest = lazy(() =>
@@ -142,8 +141,8 @@ const MeaningTutorMain = lazy(() => import("./pages/tutorpage/meaning/main"));
 const MeaningTutorShortData = lazy(() =>
   import("./pages/tutorpage/meaning/short-answer-data")
 );
-const MeaningTutorQ2Data = lazy(() =>
-  import("./pages/tutorpage/meaning/q2-data")
+const MeaningTutorBlankData = lazy(() =>
+  import("./pages/tutorpage/meaning/blank-data")
 );
 const MeaningTutorMultipleChoiceData = lazy(() =>
   import("./pages/tutorpage/meaning/multiple-choice-data")
@@ -332,11 +331,6 @@ class App extends React.Component {
               />
               <Route
                 exact
-                path="/tutor/print/q2data"
-                component={PrintTutorQ2Data}
-              />
-              <Route
-                exact
                 path="/tutor/print/multiple"
                 component={PrintTutorMultipleData}
               />
@@ -385,8 +379,8 @@ class App extends React.Component {
               />
               <Route
                 exact
-                path="/tutor/meaning/q2data"
-                component={MeaningTutorQ2Data}
+                path="/tutor/meaning/blank"
+                component={MeaningTutorBlankData}
               />
               <Route
                 exact

@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { Button, Container } from "@material-ui/core";
 import Q1Table from "../../../components/tutor/meaning/assign-table/short-answer-table";
-import Q2Table from "../../../components/tutor/meaning/assign-table/q2-table";
+import Q2Table from "../../../components/tutor/meaning/assign-table/blank-table";
 import Q3Table from "../../../components/tutor/meaning/assign-table/multiple-choice-table";
 
 class MeaningTutorTestOneAssign extends React.Component {

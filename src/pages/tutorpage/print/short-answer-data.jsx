@@ -40,7 +40,7 @@ class PrintqData extends React.Component {
     const { question, answer, section } = this.state;
     await axios.post("/api/print/short", {
       question: question,
-      answer: answer.split(","), version: section
+      answers: answer.split(","), version: section
     });
     await this.setState({ question: "", answer: [] });
     this.componentDidMount();

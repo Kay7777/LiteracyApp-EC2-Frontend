@@ -2,9 +2,9 @@ import React from "react";
 import axios from "axios";
 import { Snackbar } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
-import Q1Table from "../assets/q1-table";
-import Q2Table from "../assets/q2-table";
-import Q3Table from "../assets/q3-table";
+import Q1Table from "../../thread/multiple-table";
+import Q2Table from "../../thread/blank-table";
+import Q3Table from "../../thread/short-table";
 import P1 from "../../../../assets/fonts/p1";
 import P2 from "../../../../assets/fonts/p2";
 import P3 from "../../../../assets/fonts/p3";
@@ -62,7 +62,6 @@ class PrintTrainPart extends React.Component {
       q2Index,
       q3Index,
     } = this.state;
-    console.log(q1Assign, q1Score);
     // 1. Clean the student last progress and delete the old progress
     const doc1 = await axios.put("/api/print/student/progress", {
       newProgress: "",
@@ -86,6 +85,7 @@ class PrintTrainPart extends React.Component {
       q1Questions: q1,
       q2Questions: q2,
       q3Questions: q3,
+      version: this.state.version
     });
     await axios.put("/api/print/student/progress", {
       newProgress: doc2.data._id,
@@ -117,8 +117,8 @@ class PrintTrainPart extends React.Component {
         return (
           <Q1Table
             rows={q1}
+            mode="assign"
             handleSaveAssignment={(index, questions, assign, score) => {
-              console.log(assign, score);
               this.setState(
                 {
                   q1Index: index,
@@ -138,6 +138,7 @@ class PrintTrainPart extends React.Component {
         return (
           <Q2Table
             rows={q2}
+            mode="assign"
             handleSaveAssignment={(index, questions, assign, score) => {
               this.setState(
                 {
@@ -158,6 +159,7 @@ class PrintTrainPart extends React.Component {
         return (
           <Q3Table
             rows={q3}
+            mode="assign"
             handleSaveAssignment={(index, questions, assign, score) => {
               this.setState({
                 q3Index: index,

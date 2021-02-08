@@ -16,10 +16,8 @@ class PrintData extends React.Component {
       qW2: [],
       qAccess: [],
       question: "",
-      choice1: "",
-      choice2: "",
-      answer: "",
-      choices: [],
+      answers: "",
+      choices: "",
       alert: false, section: "w1"
     };
   }
@@ -40,18 +38,14 @@ class PrintData extends React.Component {
   };
 
   addData = async () => {
-    const { question, choices, section } = this.state;
+    const { question, choices, section, answers } = this.state;
     await axios.post("/api/print/multiple", {
-      question: question,
-      choices: choices,
-      version: section
+      question, choices: choices.split(","), answers: answers.split(","), version: section
     });
     await this.setState({
       question: "",
-      choice1: "",
-      choice2: "",
-      answer: "",
-      choices: [],
+      answers: "",
+      choices: "",
     });
     this.componentDidMount();
   };
@@ -84,16 +78,7 @@ class PrintData extends React.Component {
   }
 
   render() {
-    const {
-      qW1, qW2,
-      question,
-      choice1,
-      choice2,
-      answer,
-      choices,
-      alert, section
-    } = this.state;
-
+    const { question, answers, choices, alert, section} = this.state;
     return (
       <div>
         <div className="jumbotron">
@@ -122,9 +107,8 @@ class PrintData extends React.Component {
             beff-ffeb, the correct answer is beff as the ff letter pattern is
             always present at the end of a word.
           </h5>
-          <li>vadd-vaad</li>
-          <li>dau-daw</li>
-          <li>dau-daw</li>
+          <li>vadd</li>
+          <li>vaad</li>
           <TextField
             label="question"
             value={question}
@@ -134,83 +118,24 @@ class PrintData extends React.Component {
           />
           <br />
           <TextField
-            label="choice1"
-            value={choice1}
+            label="choices"
             autoComplete="off"
+            value={choices}
             style={{ marginRight: 10 }}
-            onChange={(e) => this.setState({ choice1: e.target.value })}
+            onChange={(e) => this.setState({ choices: e.target.value })}
           />
           <TextField
-            label="choice2"
-            value={choice2}
+            label="answers"
             autoComplete="off"
+            value={answers}
             style={{ marginRight: 10 }}
-            onChange={(e) => this.setState({ choice2: e.target.value })}
+            onChange={(e) => this.setState({ answers: e.target.value })}
           />
-          <TextField
-            label="answer"
-            autoComplete="off"
-            value={answer}
-            style={{ marginRight: 10 }}
-            onChange={(e) => this.setState({ answer: e.target.value })}
-          />
-          <Button
-            variant="outlined"
-            color="default"
-            style={{ marginRight: 10, marginTop: 10 }}
-            onClick={() => {
-              this.setState((state) => {
-                const { choice1, choice2, answer, choices } = state;
-                const newChoice = {
-                  choice1: choice1,
-                  choice2: choice2,
-                  answer: answer,
-                };
-                choices.push(newChoice);
-                this.setState({
-                  choice1: "",
-                  choice2: "",
-                  answer: "",
-                });
-                return {
-                  choices,
-                  ...state,
-                };
-              });
-            }}
-          >
-            Add a choice
+          <Button variant="outlined" color="primary" onClick={this.addData} style={{marginLeft: 5, marginTop: 10}}>
+            Add
           </Button>
-          <Button
-            variant="outlined"
-            color="secondary"
-            style={{ marginTop: 10 }}
-            onClick={() => this.setState({ choices: [] })}
-          >
-            empty entries
-          </Button>
-          <div className="row" style={{ marginTop: 10, marginLeft: 10 }}>
-            <h5>Choices you entered:</h5>
-            <h4>
-              {choices.map(
-                (choice) =>
-                  choice.choice1 +
-                  "/" +
-                  choice.choice2 +
-                  "/" +
-                  choice.answer +
-                  ","
-              )}
-            </h4>
-          </div>
-          <h5>
-            (Each entry contains one choice1, one choice2 and one answer, but do
-            not include - or / )
-          </h5>
-          <Button variant="outlined" color="primary" onClick={this.addData}>
-            Add a question
-          </Button>
-
+          <br/>
+          <p>(please using comma to separate multiple choices)</p>
         </Container>
         <br />
         <br />

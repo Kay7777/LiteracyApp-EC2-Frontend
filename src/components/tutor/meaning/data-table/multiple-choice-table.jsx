@@ -25,7 +25,7 @@ export default function SimpleTable(props) {
           <TableRow>
             <TableCell align="left">Question</TableCell>
             <TableCell align="left">Choices</TableCell>
-            <TableCell align="left">Answer</TableCell>
+            <TableCell align="left">Answers</TableCell>
             <TableCell align="left">Operation</TableCell>
           </TableRow>
         </TableHead>
@@ -36,7 +36,7 @@ export default function SimpleTable(props) {
               <TableCell align="left">
               {JSON.stringify(row.choices)}
               </TableCell>
-              <TableCell align="left">{row.answer}</TableCell>
+              <TableCell align="left">{JSON.stringify(row.answers)}</TableCell>
               <TableCell align="left">
                 <Button
                   color="secondary"

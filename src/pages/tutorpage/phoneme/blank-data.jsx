@@ -75,11 +75,11 @@ class PhonemeTutorPhonemeData extends React.Component {
   }
 
   render() {
-    const { question, answer, choices, section } = this.state;
+    const { question, answer, section } = this.state;
     return (
       <div>
         <div className="jumbotron">
-          <h2>Modify the blank question Data</h2>
+          <h2>Modify the Phoneme Blank Question Data</h2>
           <hr />
           <Button variant="contained" color="default" href="/tutor/phoneme">
             Go back

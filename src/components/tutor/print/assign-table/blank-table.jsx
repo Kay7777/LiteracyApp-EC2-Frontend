@@ -32,7 +32,7 @@ export default function SimpleTable(props) {
           {props.rows.map((row, index) => (
             <TableRow key={index}>
               <TableCell align="right">{row.question}</TableCell>
-              <TableCell align="right">{JSON.stringify(row.answer)}</TableCell>
+              <TableCell align="right">{row.answer}</TableCell>
               <TableCell align="right">
                 <Button
                   color="secondary"

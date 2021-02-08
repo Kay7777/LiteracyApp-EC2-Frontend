@@ -17,11 +17,8 @@ class MeaningData extends React.Component {
       qAccess: [],
       section: "w1",
       question: "",
-      choice1: "",
-      choice2: "",
-      choice3: "",
-      choice4: "",
-      answer: "",
+      choices: "",
+      answers: "",
       alert: false,
     };
   }
@@ -44,26 +41,20 @@ class MeaningData extends React.Component {
   addData = async () => {
     const {
       question,
-      choice1,
-      choice2,
-      choice3,
-      choice4,
-      answer,
+      choices,
+      answers,
       section,
     } = this.state;
     await axios.post("/api/meaning/multiple", {
       question,
-      choices: [choice1, choice2, choice3, choice4],
-      answer,
+      choices: choices.split(","),
+      answers: answers.split(","),
       version: section
     });
     await this.setState({
       question: "",
-      choice1: "",
-      choice2: "",
-      choice3: "",
-      choice4: "",
-      answer: "",
+      choices: "",
+      answers: "",
     });
     this.componentDidMount();
   };
@@ -99,18 +90,15 @@ class MeaningData extends React.Component {
     const {
       section,
       question,
-      choice1,
-      choice2,
-      choice3,
-      choice4,
-      answer,
+      choices,
+      answers,
       alert,
     } = this.state;
 
     return (
       <div>
         <div className="jumbotron">
-          <h2>Modify meaning Question 3 data</h2>
+          <h2>Modify meaning Multiple Choice Question data</h2>
           <hr />
           <Button variant="contained" color="default" href="/tutor/meaning">
             Go back
@@ -130,13 +118,8 @@ class MeaningData extends React.Component {
           </Select>
         </Container>
         <Container>
-          <h4>
-            You will see sentences with a blank, followed by four options. Read
-            the sentence and select the nonsense word that best fits the
-            sentence. See the example below
-          </h4>
           <h5>
-            Despite her knowledge, the _____ was unable to respond to the
+            Example: Despite her knowledge, the _____ was unable to respond to the
             question.
           </h5>
           <li>floxatize</li>
@@ -152,39 +135,18 @@ class MeaningData extends React.Component {
           />
           <br />
           <TextField
-            label="choice1"
-            value={choice1}
+            label="choices"
+            value={choices}
             autoComplete="off"
             style={{ marginRight: 10 }}
-            onChange={(e) => this.setState({ choice1: e.target.value })}
+            onChange={(e) => this.setState({ choices: e.target.value })}
           />
           <TextField
-            label="choice2"
-            value={choice2}
+            label="answers"
             autoComplete="off"
+            value={answers}
             style={{ marginRight: 10 }}
-            onChange={(e) => this.setState({ choice2: e.target.value })}
-          />
-          <TextField
-            label="choice3"
-            value={choice3}
-            autoComplete="off"
-            style={{ marginRight: 10 }}
-            onChange={(e) => this.setState({ choice3: e.target.value })}
-          />
-          <TextField
-            label="choice4"
-            value={choice4}
-            autoComplete="off"
-            style={{ marginRight: 10 }}
-            onChange={(e) => this.setState({ choice4: e.target.value })}
-          />
-          <TextField
-            label="answer"
-            autoComplete="off"
-            value={answer}
-            style={{ marginRight: 10 }}
-            onChange={(e) => this.setState({ answer: e.target.value })}
+            onChange={(e) => this.setState({ answers: e.target.value })}
           />
           <Button variant="contained" color="primary" style={{ marginLeft: 5, marginTop: 10 }} onClick={this.addData}>
             Add

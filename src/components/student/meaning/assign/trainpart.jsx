@@ -1,8 +1,8 @@
 import React from "react";
 import axios from "axios";
-import Q1Table from "../assets/q1-table";
-import Q2Table from "../assets/q2-table";
-import Q3Table from "../assets/q3-table";
+import Q1Table from "../../thread/multiple-table";
+import Q2Table from "../../thread/blank-table";
+import Q3Table from "../../thread/short-table";
 import MuiAlert from "@material-ui/lab/Alert";
 import { Snackbar } from "@material-ui/core";
 
@@ -45,7 +45,6 @@ class MeaningTrainPart extends React.Component {
   };
 
   handleSaveAssignment = async () => {
-    console.log("handle save is called once");
     const {
       q1,
       q2,
@@ -83,6 +82,7 @@ class MeaningTrainPart extends React.Component {
       q1Questions: q1,
       q2Questions: q2,
       q3Questions: q3,
+      version: this.state.version
     });
     await axios.put("/api/meaning/student/progress", {
       newProgress: doc2.data._id,
@@ -95,7 +95,6 @@ class MeaningTrainPart extends React.Component {
   handleSubmit = async (q3_score, q3Assign) => {
     const { q1_score, q2_score, q1Assign, q2Assign, version } = this.state;
     const newScore = q1_score + q2_score + q3_score;
-    console.log(q1_score, q2_score, q3_score, q1Assign, q2Assign, q3Assign);
     await axios.post("/api/meaning/assign", {
       newScore,
       q1Assign,
@@ -106,6 +105,7 @@ class MeaningTrainPart extends React.Component {
     await axios.put("/api/meaning/score", { newScore });
     window.location = "/student/meaning";
   };
+
   handleCloseAlert = (event, reason) => {
     if (reason === "clickaway") return;
     this.setState({ alert: false });
@@ -118,8 +118,8 @@ class MeaningTrainPart extends React.Component {
         return (
           <Q1Table
             rows={q1}
+            mode="assign"
             handleSaveAssignment={(index, questions, assign, score) => {
-              console.log(assign, score);
               this.setState(
                 {
                   q1Index: index,
@@ -139,6 +139,7 @@ class MeaningTrainPart extends React.Component {
         return (
           <Q2Table
             rows={q2}
+            mode="assign"
             handleSaveAssignment={(index, questions, assign, score) => {
               this.setState(
                 {
@@ -159,6 +160,7 @@ class MeaningTrainPart extends React.Component {
         return (
           <Q3Table
             rows={q3}
+            mode="assign"
             handleSaveAssignment={(index, questions, assign, score) => {
               this.setState(
                 {

@@ -16,7 +16,7 @@ class MeaningqData extends React.Component {
       qW2: [],
       qAccess: [],
       question: "",
-      answer: "",
+      answers: "",
       alert: false,
       section: "w1"
     };
@@ -38,13 +38,13 @@ class MeaningqData extends React.Component {
   };
 
   addData = async () => {
-    const { question, answer, section } = this.state;
+    const { question, answers, section } = this.state;
     await axios.post("/api/meaning/short", {
       question: question,
-      answer: answer.split(","),
+      answers: answers.split(","),
       version: section
     });
-    await this.setState({ question: "", answer: [] });
+    await this.setState({ question: "", answers: "" });
     this.componentDidMount();
   };
 
@@ -76,12 +76,12 @@ class MeaningqData extends React.Component {
   }
 
   render() {
-    const { section, question, answer, alert } = this.state;
+    const { section, question, answers, alert } = this.state;
 
     return (
       <div>
         <div className="jumbotron">
-          <h2>Modify Meaning Question 1 Data</h2>
+          <h2>Modify Meaning Short Answer Questions Data</h2>
           <hr />
           <Button variant="contained" color="default" href="/tutor/meaning">
             Go back
@@ -115,11 +115,11 @@ class MeaningqData extends React.Component {
           />
           <br />
           <TextField
-            label="answer"
+            label="answers"
             autoComplete="off"
-            value={answer}
+            value={answers}
             style={{width: 200}}
-            onChange={(e) => this.setState({ answer: e.target.value })}
+            onChange={(e) => this.setState({ answers: e.target.value })}
           />
           <Button
             variant="contained"

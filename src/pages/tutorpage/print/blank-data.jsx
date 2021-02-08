@@ -79,7 +79,7 @@ class PrintTutorBlankData extends React.Component {
     return (
       <div>
         <div className="jumbotron">
-          <h2>Modify the blank questions Data</h2>
+          <h2>Modify the Print blank questions Data</h2>
           <hr />
           <Button variant="contained" color="default" href="/tutor/print">
             Go back

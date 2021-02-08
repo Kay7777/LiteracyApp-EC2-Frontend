@@ -1,8 +1,8 @@
 import React from "react";
 import axios from "axios";
-import Q1Table from "../assets/q1-test-table";
-import Q2Table from "../assets/q2-test-table";
-import Q3Table from "../assets/q3-test-table";
+import Q1Table from "../../thread/multiple-table";
+import Q2Table from "../../thread/blank-table";
+import Q3Table from "../../thread/short-table";
 
 class PrintTestPart extends React.Component {
   constructor() {
@@ -46,6 +46,7 @@ class PrintTestPart extends React.Component {
         return (
           <Q1Table
             rows={q1}
+            mode="test"
             handleNext={(q1_score, q1Assign) =>
               this.setState({ q1_score, q1Assign, q_show: q_show + 1 })
             }
@@ -54,6 +55,7 @@ class PrintTestPart extends React.Component {
       case 1:
         return (
           <Q2Table
+            mode="test"
             rows={q2}
             handleNext={(q2_score, q2Assign) =>
               this.setState({ q2_score, q2Assign, q_show: q_show + 1 })
@@ -64,6 +66,7 @@ class PrintTestPart extends React.Component {
         return (
           <Q3Table
             rows={q3}
+            mode="test"
             handleNext={(q3_score, q3Assign) =>
               this.handleSubmit(q3_score, q3Assign)
             }

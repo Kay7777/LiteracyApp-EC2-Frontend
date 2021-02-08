@@ -51,9 +51,9 @@ class MeaningTutorMain extends React.Component {
               description="You can modify Short Answer data here"
             />
             <TrainCard
-              title="Modify Meaning Question 2 Data"
-              page="/tutor/meaning/q2data"
-              description="You can modify question 2 data here"
+              title="Modify Meaning Blank Question Data"
+              page="/tutor/meaning/blank"
+              description="You can modify blank question data here"
             />
             <TrainCard
               title="Modify Meaning Multiple Choice Data"
