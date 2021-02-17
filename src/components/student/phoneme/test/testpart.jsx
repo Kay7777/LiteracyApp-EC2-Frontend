@@ -1,115 +1,100 @@
 import React from "react";
-import WordCard from "../assets/wordcard";
-import Process from "../../../../assets/process";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import { connect } from "react-redux";
 import axios from "axios";
+import Q0Table from "../assets/phoneme-table";
+import Q1Table from "../../thread/multiple-table";
+import Q2Table from "../../thread/blank-table";
+import Q3Table from "../../thread/short-table";
 
-class PhonemeTestPart extends React.Component {
+class phonemeTestPart extends React.Component {
   constructor() {
     super();
     this.state = {
-      ids: [],
-      rightId: [],
-      levels: [],
-      words: [],
-      phonemes: [],
-      answers: [],
-      index: 0,
-      correct: false,
-      answer: false,
-      input: "",
+      q0: [],
+      q1: [],
+      q2: [],
+      q3: [],
+      q0_score: 0,
+      q1_score: 0,
+      q2_score: 0,
+      q0Assign: [],
+      q1Assign: [],
+      q2Assign: [],
+      q_show: -1,
     };
   }
 
   componentDidMount = async () => {
-    const doc = await axios.get("/api/phoneme/phonemes/access");
-    let data = doc.data;
-    await this.setState({
-      words: data.words,
-      phonemes: data.phonemes,
-      levels: data.levels,
-      ids: data.ids,
+    const doc = await axios.get("/api/phoneme/student/test");
+    const { q0, q1, q2, q3 } = doc.data;
+    await this.setState({ q0, q1, q2, q3 });
+  };
+
+  handleSubmit = async (q3_score, q3Assign) => {
+    const { q0_score, q1_score, q2_score, q0Assign, q1Assign, q2Assign } = this.state;
+    const newScore = q0_score + q1_score + q2_score + q3_score;
+    await axios.post("/api/phoneme/test", {
+      newScore,
+      q0Assign,
+      q1Assign,
+      q2Assign,
+      q3Assign,
     });
-  };
-
-  handleFlip = async () => {
-    if (this.state.phonemes[this.state.index] === this.state.input) {
-      const newRightIds = this.state.rightId;
-      newRightIds.push(this.state.ids[this.state.index]);
-      this.setState({
-        correct: true,
-        answer: true,
-        rightId: newRightIds,
-      });
-    } else {
-      this.setState({
-        correct: false,
-        answer: true,
-      });
-    }
-    const newAnswers = this.state.answers;
-    newAnswers.push(this.state.input);
-    this.setState({ answers: newAnswers });
-  };
-
-  changeQuestion = async () => {
-    await this.setState({
-      index: this.state.index + 1,
-      answer: false,
-      input: "",
-    });
-  };
-
-  update = async () => {
-    const { rightId, words, phonemes, answers, levels } = this.state;
-    const newScore = 20 * (rightId.length / words.length);
-    let phonemeAssign = [];
-    for (let i = 0; i < words.length; i++) {
-      phonemeAssign.push({
-        word: words[i],
-        phoneme: phonemes[i],
-        level: levels[i],
-        answer: answers[i],
-      });
-    }
-    // create practice student-side assignment
-    await axios.post("/api/phoneme/test", { newScore, phonemeAssign });
-    // update the first score
     await axios.post("/api/phoneme/score", { newScore });
     window.location = "/student/phoneme";
   };
 
+  renderQuestion = () => {
+    const { q_show, q0, q1, q2, q3 } = this.state;
+    switch (q_show) {
+      case -1:
+        return (
+          <Q0Table
+            rows={q0}
+            mode="test"
+            handleNext={(q0_score, q0Assign) =>
+              this.setState({ q0_score, q0Assign, q_show: q_show + 1 })
+            }
+          />
+        );
+      case 0:
+        return (
+          <Q1Table
+            rows={q1}
+            mode="test"
+            handleNext={(q1_score, q1Assign) =>
+              this.setState({ q1_score, q1Assign, q_show: q_show + 1 })
+            }
+          />
+        );
+      case 1:
+        return (
+          <Q2Table
+            rows={q2}
+            mode="test"
+            handleNext={(q2_score, q2Assign) =>
+              this.setState({ q2_score, q2Assign, q_show: q_show + 1 })
+            }
+          />
+        );
+      case 2:
+        return (
+          <Q3Table
+            rows={q3}
+            mode="test"
+            handleNext={(q3_score, q3Assign) =>
+              this.handleSubmit(q3_score, q3Assign)
+            }
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
   render() {
-    const progress = ((this.state.index + 1) / this.state.words.length) * 100;
-    return (
-      <div>
-        {this.state.words.length !== 0 ? (
-          <div style={{ margin: "30px 25%" }}>
-            <WordCard
-              word={this.state.words[this.state.index]}
-              phoneme={this.state.phonemes[this.state.index]}
-              input={this.state.input}
-              answered={this.state.answer}
-              correct={this.state.correct}
-              handleClick={() => this.handleFlip(this.state.index)}
-              handleInput={(input) => this.setState({ input: input })}
-              next={() => this.changeQuestion()}
-              last={this.state.index + 1 === this.state.words.length}
-              update={() => this.update()}
-            />
-            <LinearProgress variant="determinate" value={progress} />
-          </div>
-        ) : (
-            <Process />
-          )}
-      </div>
-    );
+    const { q0 } = this.state;
+    return !!q0.length ? this.renderQuestion() : null;
   }
 }
 
-const mapStateToProps = (state) => ({
-  currentUser: state.user.currentUser,
-});
-
-export default connect(mapStateToProps)(PhonemeTestPart);
+export default phonemeTestPart;

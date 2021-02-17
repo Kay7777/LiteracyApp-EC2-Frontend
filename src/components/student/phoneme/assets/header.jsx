@@ -26,7 +26,6 @@ const PhonemeHeader = (props) => {
                     currentUser.phoneme_score.length - 1
                   ]["value"]
                 }
-                / 20
               </P3>
             )}
           </p>
